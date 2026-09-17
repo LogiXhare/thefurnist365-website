@@ -245,18 +245,44 @@ function fc365_upload_safe_name($filename, string $extension): string
     return "$name.$extension";
 }
 
-function fc365_upload_unique_path(string $directory, string $name): string
+/**
+ * Atomically claim a unique filename in $directory and return it already
+ * opened for writing: [$name, $fp].
+ *
+ * A separate file_exists()-then-fopen('wb') pair (the previous shape of
+ * this function) leaves a TOCTOU window open between the check and the
+ * write: two concurrent uploads slugging to the same base name could both
+ * pass the existence check before either has written anything, and the
+ * second fopen('wb') would then silently truncate and overwrite the
+ * first's file. 'xb' asks the OS to create-or-fail in one syscall, so
+ * "does this name already exist" and "claim it" happen atomically -- the
+ * loop below only ever has to retry, never re-check separately. Low real-
+ * world severity (this is a human-paced single/dual-admin tool, not a
+ * place a genuine collision storm occurs), fixed anyway because it was a
+ * small, self-contained change.
+ */
+function fc365_upload_open_unique(string $directory, string $name): array
 {
     $dot = strrpos($name, '.');
     $stem = substr($name, 0, $dot);
     $ext = substr($name, $dot + 1);
     $candidate = $name;
     $counter = 1;
-    while (file_exists($directory . '/' . $candidate)) {
+    while (true) {
+        $path = $directory . '/' . $candidate;
+        $fp = @fopen($path, 'xb');
+        if ($fp !== false) {
+            return [$candidate, $fp];
+        }
+        if (!file_exists($path)) {
+            // fopen('xb') failed for a reason OTHER than "already exists"
+            // (permissions, a full disk, ...) -- trying a different name
+            // would not help.
+            throw new UploadError(500, 'internal_error', 'Could not write the uploaded file.');
+        }
         $counter++;
         $candidate = "$stem-$counter.$ext";
     }
-    return $candidate;
 }
 
 // ---------------------------------------------------------------- upload
@@ -337,13 +363,8 @@ function fc365_store_upload($folder, $filename, $b64): array
     // 7. Regenerate the name from the sniffed type.
     $name = fc365_upload_safe_name($filename, $kind === 'jpg' ? 'jpg' : $kind);
 
-    // 8. Python's BoundedSemaphore(2) upload concurrency cap is deliberately
-    // dropped here -- meaningless across independent PHP-FPM worker
-    // processes; pm.max_children is the hosting-layer equivalent. See
-    // architecture section 7.6.
-    $name = fc365_upload_unique_path($directory, $name);
-
-    // Belt and braces containment check. The architecture doc's own example
+    // Belt and braces containment check, on the BASE name BEFORE any
+    // collision suffix is appended. The architecture doc's own example
     // (section 7.5) calls realpath() on the FINAL path and checks the
     // result starts with the resolved directory -- that works in Python
     // because os.path.realpath() resolves a path lexically even when the
@@ -353,12 +374,15 @@ function fc365_store_upload($folder, $filename, $b64): array
     // this write. Ported as literally shown, every single upload would
     // fail this check. The fix used here: resolve realpath() on the
     // DIRECTORY (which does exist) once, and confirm $name -- which this
-    // function generated itself via fc365_upload_safe_name()/
-    // fc365_upload_unique_path(), restricted to [a-z0-9-] plus one dot and
-    // a known extension -- contains no path separator or ".." segment, so
-    // concatenating it onto the resolved directory cannot escape it. This
-    // is flagged in the final report as a deviation from the architecture
-    // doc's literal snippet, not a silent one.
+    // function generated itself via fc365_upload_safe_name(), restricted to
+    // [a-z0-9-] plus one dot and a known extension -- contains no path
+    // separator or ".." segment, so concatenating it onto the resolved
+    // directory cannot escape it. fc365_upload_open_unique() below only
+    // ever appends "-<digits>" before the extension, which cannot introduce
+    // a separator or ".."/"." either, so checking once here covers every
+    // candidate it will try. This is flagged in the final report as a
+    // deviation from the architecture doc's literal snippet, not a silent
+    // one.
     $realDir = realpath($directory);
     if (
         $realDir === false
@@ -367,11 +391,12 @@ function fc365_store_upload($folder, $filename, $b64): array
     ) {
         throw new UploadError(400, 'bad_path', 'Refusing to write outside the image folder.');
     }
-    $final = $realDir . DIRECTORY_SEPARATOR . $name;
-    $fp = fopen($final, 'wb');
-    if ($fp === false) {
-        throw new UploadError(500, 'internal_error', 'Could not write the uploaded file.');
-    }
+
+    // 8. Python's BoundedSemaphore(2) upload concurrency cap is deliberately
+    // dropped here -- meaningless across independent PHP-FPM worker
+    // processes; pm.max_children is the hosting-layer equivalent. See
+    // architecture section 7.6.
+    [$name, $fp] = fc365_upload_open_unique($realDir, $name);
     fwrite($fp, $data);
     fflush($fp);
     fclose($fp);

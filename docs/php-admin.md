@@ -28,7 +28,27 @@ uploaded once by hand:
    run from a git checkout, with no environment variable needed — see
    section 3). It does **not** touch production.
 
-2. Upload that one file over SFTP, directly into:
+2. If `private/furnist365/` does not exist on the server yet, create it
+   with an explicit restrictive mode rather than whatever your SFTP client
+   defaults to (commonly `0755`, which would let other tenants on the same
+   shared host `ls` filenames — never contents; every file written into it
+   by this app is itself chmoded `0600` regardless — inside a directory that
+   otherwise has no business being world-listable):
+
+   ```
+   mkdir -m 700 private/furnist365
+   ```
+
+   (or the equivalent two steps, `mkdir` then `chmod 700`, if your SFTP
+   client's `mkdir` doesn't take a mode argument). This only matters for the
+   very first time the directory is created by hand — every request past
+   that point re-hardens it back to `0700` on its own
+   (`fc365_ensure_private_dir()` in `config.php`, called from
+   `fc365_auth_start_session()` on every request), so a loose mode here
+   self-heals as soon as the admin panel is used even once, but there's no
+   reason to leave it loose even briefly.
+
+3. Upload that one file over SFTP, directly into:
 
    ```
    private/furnist365/admin.json
@@ -36,11 +56,12 @@ uploaded once by hand:
 
    on `earth.wetechi.com` (a sibling of `public_html/`, never inside it).
 
-3. Restart nothing — PHP-FPM reads `admin.json` fresh on every request; there
+4. Restart nothing — PHP-FPM reads `admin.json` fresh on every request; there
    is no daemon to restart.
 
-**Rotating the password later** repeats exactly these three steps. There is
-no `POST /api/admin/change-password` endpoint — the frozen contract
+**Rotating the password later** repeats steps 1, 3 and 4 — step 2 (creating
+the directory) is one-time only. There is no `POST /api/admin/change-password`
+endpoint — the frozen contract
 (`docs/api-admin.md`) never defines one, since the already-built admin
 frontend was never written to call one, and adding one would be scope creep
 against "make PHP conform to the contract, never the reverse."
@@ -237,6 +258,21 @@ belongs in the same verification pass:
   host that lacks it. Verify `intl` is loaded (`php -m`) during the same P-0
   host check that already verifies `dom`/`libxml`.
 
+- **`post_max_size`** (Apache/PHP-FPM's own request-body limit, not this
+  application's). `site/admin/.user.ini` sets it to `10M`, per architecture
+  section 7.2's own action item — without it, Apache/PHP-FPM would reject an
+  upload near our 8 MiB cap (`FC365_MAX_UPLOAD_BODY`) before any PHP code in
+  this app ever runs, on any host whose default `post_max_size` is at or
+  below that (an 8M shared-hosting default is common), producing a raw host
+  error page instead of the documented `413` JSON shape. **Not verified from
+  this codebase's own development machine** — there is no `php-fpm`/Apache
+  running the real site to test against here. Confirm during the production
+  migration (architecture section 11 Phase 4) that this `.user.ini` actually
+  took effect — e.g. a temporary `phpinfo()`/`ini_get('post_max_size')` check,
+  or attempting a >8 MiB upload and confirming a clean `413`, not a host
+  error page — and remember PHP re-reads `.user.ini` on a cache TTL
+  (`user_ini.cache_ttl`, default 300s), not instantly on deploy.
+
 ---
 
 ## 5. Residual risk carried over from the SVG scrubber
@@ -245,11 +281,36 @@ Both the Python and PHP versions scrub uploaded SVGs with a byte-level
 blocklist (`<script`, `<foreignObject`, `<!ENTITY`, `javascript:`, `<use`,
 `<handler`, `<set`, `on...=` attributes, off-origin `href`/`xlink:href`)
 plus a well-formedness/root-element check. A blocklist is inherently
-incomplete against a determined attacker crafting new SVG/XML tricks; the
-mitigations that make this an acceptable residual risk are unchanged from
-the Python design: SVG is only ever accepted into the `brand`/`brands`
-folders (vendor/site logos, not arbitrary user content), and every `.svg`
-response is served with `Content-Security-Policy: default-src 'none';
-style-src 'unsafe-inline'` (configure this at the Apache/hosting layer for
-static file responses, since PHP is not in the path for a plain static
-`.svg` GET once uploaded).
+incomplete against a determined attacker crafting new SVG/XML tricks.
+
+**The `Content-Security-Policy: default-src 'none'; style-src
+'unsafe-inline'` header on every `.svg` response (`site/.htaccess`) is not a
+second, optional layer on top of some other control — it is the actual last
+line of defence.** A scrubber bypass that reaches disk becomes live,
+same-origin stored XSS the moment anyone (an admin included) opens that
+`.svg` directly; `SameSite=Strict` only blocks *cross*-origin requests, so a
+same-origin script can still `fetch()` `/api/admin/*` with the real session
+cookie and a forged `X-FC-Admin: 1` header attached. (An earlier draft of
+`docs/php-admin-architecture.md` §8.2 characterized a *different* pair of
+rules — the stray-`.php` deny and the `data.js` cache header — as "cheap,
+not load-bearing"; that framing does not extend to this header, and §8.2 now
+says so explicitly.)
+
+SVG is also only ever accepted into the `brand`/`brands` folders
+(vendor/site logos, not arbitrary user content), which narrows who can even
+attempt a bypass to someone who already has the admin password.
+
+**This header depends on `mod_headers` actually applying, which depends on
+`AllowOverride` actually being in effect for `site/.htaccess` on the real
+host — unverified from a dev machine (architecture §10 risk 2).** The
+concerning failure mode is not a *total* `.htaccess` failure (routing loudly
+404s; harmless, and doesn't expose anything, since nothing sensitive lives
+under `public_html/` regardless — see §8.2) but a *partial* one, where
+routing keeps working while `mod_headers` and/or `admin/.htaccess`'s
+`.php`-deny silently stop applying. Nothing breaks visibly in that case, so
+nobody would notice. `.github/workflows/deploy.yml`'s post-deploy smoke test
+now asserts, after every real (non-dry-run) deploy: `GET
+/api/admin/session` answers 200 (confirms routing), a live `.svg` response
+actually carries the CSP header (confirms `mod_headers`), and a deliberately
+nonexistent `.php` path under `/admin/` answers 403, not 404 (confirms the
+`FilesMatch` deny is still active).

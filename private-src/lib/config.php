@@ -162,8 +162,20 @@ function fc365_limits(): array
 }
 
 /**
- * mkdir a private-side directory with 0700 if it does not exist yet.
- * Used for sessions/, backups/, and FC365_PRIVATE_ROOT itself in local dev.
+ * mkdir a private-side directory with 0700 if it does not exist yet, and
+ * (re)harden it to 0700 even if it already existed.
+ *
+ * The re-harden-on-every-call part matters for FC365_PRIVATE_ROOT itself:
+ * per the documented SFTP migration (docs/php-admin.md), that top-level
+ * directory is typically created by hand, over SFTP, before admin.json is
+ * ever uploaded to it -- and an SFTP client's default mkdir mode is
+ * commonly something looser than 0700 (e.g. 0755), which would let other
+ * tenants on the same shared host `ls` filenames (never contents --
+ * admin.json/site.json are written with their own explicit chmod
+ * regardless) inside it. Since this directory already exists by the time
+ * any of this code runs, the `if (!is_dir())` branch above would never fire
+ * for it and so never fix a loose mode left over from that manual step --
+ * chmod is cheap and idempotent, so just always confirm it on every call.
  */
 function fc365_ensure_private_dir(string $path): void
 {
@@ -172,6 +184,7 @@ function fc365_ensure_private_dir(string $path): void
             throw new RuntimeException("Could not create directory: $path");
         }
     }
+    @chmod($path, 0700);
 }
 
 /**

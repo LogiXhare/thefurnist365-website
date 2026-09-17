@@ -191,6 +191,11 @@ function fc365_take_backup(): ?string
     if (!copy(FC365_SITE_JSON, $target)) {
         throw new StoreError('could not create a backup before writing');
     }
+    // copy() does not carry over source permissions on every platform; it
+    // creates the destination based on the process umask like any other new
+    // file. Match site.json's own 0600 for the same reason -- see the note
+    // on fc365_atomic_write()'s $mode parameter.
+    @chmod($target, 0600);
     fc365_prune_backups();
     return $target;
 }
@@ -218,8 +223,19 @@ function fc365_prune_backups(): void
  *
  * The tmp file sits directly beside its target (never a shared tmp
  * directory), so rename() never has to cross a filesystem boundary.
+ *
+ * $mode, when given, is applied to the tmp file BEFORE the rename makes the
+ * final name visible -- the same pattern fc365_auth_write_password() already
+ * uses for admin.json -- so there is never a window where the final path
+ * exists with a looser mode than intended. Deliberately opt-in (default
+ * null = leave whatever the process umask already gave the new file, i.e.
+ * do nothing): this function writes BOTH site.json (private, worth
+ * tightening) and assets/js/data.js (served directly by Apache to every
+ * storefront visitor, so it must stay world-readable) through the same
+ * code path, and the two need different answers -- see the two call sites
+ * in fc365_store_save().
  */
-function fc365_atomic_write(string $target, string $text): void
+function fc365_atomic_write(string $target, string $text, ?int $mode = null): void
 {
     $tmp = $target . '.tmp';
     $fp = @fopen($tmp, 'wb');
@@ -233,6 +249,9 @@ function fc365_atomic_write(string $target, string $text): void
         fflush($fp);
     } finally {
         fclose($fp);
+    }
+    if ($mode !== null) {
+        @chmod($tmp, $mode);
     }
     if (!rename($tmp, $target)) {
         @unlink($tmp);
@@ -281,14 +300,22 @@ function fc365_store_save(array $doc, bool $bump = true): array
     // 4. Back up what is currently on disk.
     $backup = fc365_take_backup();
 
-    // 5. JSON first.
+    // 5. JSON first. 0600: nothing in site.json is secret (it is all also
+    // mirrored into the public data.js below), but tighten it anyway for
+    // consistency with the rest of private/furnist365/ (admin.json is
+    // 0600, the directory itself is 0700) -- lower severity than either of
+    // those, done because it was a small addition, not a newly-found risk.
     try {
-        fc365_atomic_write(FC365_SITE_JSON, $text);
+        fc365_atomic_write(FC365_SITE_JSON, $text, 0600);
     } catch (StoreError $e) {
         throw new StoreError('could not write site.json: ' . $e->getMessage());
     }
 
-    // 6. JS second.
+    // 6. JS second. Deliberately NO mode override: data.js is served
+    // directly by Apache to every storefront visitor and must stay
+    // world-readable (whatever the process umask already gives a new file,
+    // typically 0644) -- tightening this one the same way as site.json
+    // would break the live site.
     try {
         fc365_atomic_write(FC365_DATA_JS, $jsText);
     } catch (StoreError $e) {

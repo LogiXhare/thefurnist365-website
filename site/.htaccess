@@ -28,11 +28,19 @@ Options -Indexes
         Header set Cache-Control "no-store, max-age=0"
     </FilesMatch>
 
-    # Uploaded brand/brands SVGs are scrubbed on upload (uploads.php), but a
-    # blocklist scrubber is inherently incomplete -- this makes an SVG inert
-    # even if one ever gets through. Static .svg files are served directly
-    # by Apache (PHP is not in the path for a plain GET), so this header has
-    # to be set here, not in api.php. docs/api-admin.md section 4.
+    # LOAD-BEARING, unlike the two rules above: uploaded brand/brands SVGs
+    # are scrubbed on upload (uploads.php's fc365_upload_check_svg(), a
+    # blocklist that is self-documented as inherently incomplete), so this
+    # header is the actual last line of defence against a scrubber bypass
+    # becoming live, same-origin stored XSS -- not belt-and-braces on top
+    # of some other control. See docs/php-admin-architecture.md section 8.2's
+    # post-review correction. Static .svg files are served directly by
+    # Apache (PHP is not in the path for a plain GET), so this header has to
+    # be set here, not in api.php. docs/api-admin.md section 4. The deploy
+    # workflow's post-deploy smoke test asserts this header is actually
+    # present on a live .svg response after every deploy, specifically
+    # because a partial AllowOverride failure could silently drop mod_headers
+    # while routing keeps working, with nothing else visibly breaking.
     <FilesMatch "\.svg$">
         Header set Content-Security-Policy "default-src 'none'; style-src 'unsafe-inline'"
     </FilesMatch>

@@ -40,6 +40,13 @@ function fc365_auth_start_session(): void
     if (session_status() === PHP_SESSION_ACTIVE) {
         return;
     }
+    // Runs on literally every request (fc365_dispatch() calls this
+    // unconditionally, first thing) -- the cheapest place to guarantee
+    // FC365_PRIVATE_ROOT itself, not just this module's own sessions/
+    // subdirectory, keeps getting hardened back to 0700 regardless of what
+    // mode it was hand-created with over SFTP. See the comment on
+    // fc365_ensure_private_dir() in config.php.
+    fc365_ensure_private_dir(FC365_PRIVATE_ROOT);
     fc365_ensure_private_dir(FC365_SESSIONS_DIR);
     session_name(FC365_SESSION_COOKIE);
     // secure is derived from THIS request, never a startup flag -- there is
@@ -95,7 +102,23 @@ function fc365_auth_check_session(): ?int
     return $expiresAt;
 }
 
-/** Emits the exact `Set-Cookie: fc_admin=; ...; Max-Age=0` the contract documents. */
+/**
+ * Emits the exact `Set-Cookie: fc_admin=; ...; Max-Age=0` the contract
+ * documents.
+ *
+ * Deliberately replaces (default $replace = true) rather than appends: if
+ * this request had no valid session cookie to begin with, fc365_dispatch()'s
+ * unconditional session_start() (via fc365_auth_start_session()) already
+ * created a brand-new session and queued its own `Set-Cookie: fc_admin=...`
+ * header for it earlier in this same request. Passing `false` here (as an
+ * earlier version of this function did) would ADD a second `Set-Cookie:
+ * fc_admin=...` header instead of overwriting that one, so a logout with no
+ * valid session cookie -- "logging out twice is not an error", a real,
+ * contract-legal case -- answered with two conflicting Set-Cookie headers.
+ * The with-a-valid-session case was never affected: resuming an existing
+ * session id does not make PHP re-send a Set-Cookie header at all, so this
+ * call was always the only one in that case.
+ */
 function fc365_auth_clear_cookie_header(): void
 {
     $secure = !empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off';
@@ -103,7 +126,7 @@ function fc365_auth_clear_cookie_header(): void
     if ($secure) {
         $value .= '; Secure';
     }
-    header('Set-Cookie: ' . $value, false);
+    header('Set-Cookie: ' . $value);
 }
 
 /** POST /api/admin/logout: a session is not required, so this must not throw. */
@@ -252,8 +275,26 @@ function fc365_auth_attempt_login(string $peerIp, string $password): bool
                 }
             }
             $now = time();
-            $existing = is_array($state[$peerIp] ?? null) ? $state[$peerIp] : [];
-            $hits = array_values(array_filter($existing, fn($t) => ($now - (int) $t) < FC365_LOGIN_WINDOW));
+            // Sweep EVERY peer's history, not just this request's own IP --
+            // otherwise $state only ever grows: an IP that failed once a
+            // year ago stays in the file forever, decoded and re-encoded on
+            // every single login attempt from any peer, indefinitely. Drop
+            // any entry whose every timestamp has already aged out of the
+            // window; this is the one place in the whole request where the
+            // full state is already loaded and the lock is already held, so
+            // it costs nothing extra to do here.
+            foreach ($state as $ip => $timestamps) {
+                $fresh = array_values(array_filter(
+                    is_array($timestamps) ? $timestamps : [],
+                    fn($t) => ($now - (int) $t) < FC365_LOGIN_WINDOW
+                ));
+                if ($fresh) {
+                    $state[$ip] = $fresh;
+                } else {
+                    unset($state[$ip]);
+                }
+            }
+            $hits = $state[$peerIp] ?? [];
 
             if (count($hits) >= FC365_LOGIN_MAX_FAILURES) {
                 throw new RateLimited();

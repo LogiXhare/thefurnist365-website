@@ -132,3 +132,49 @@ jobs:
           code=$(curl -s -o /dev/null -w '%{http_code}' https://thefurnist365.com/)
           echo "https://thefurnist365.com/ -> $code"
           test "$code" = "200"
+
+          # Architecture doc section 11 Phase 4's own promised check, not
+          # previously wired up: confirms the /api/admin/* rewrite and the
+          # one front controller are reachable in production, read-only,
+          # before anyone attempts a real login.
+          session_code=$(curl -s -o /dev/null -w '%{http_code}' https://thefurnist365.com/api/admin/session)
+          echo "https://thefurnist365.com/api/admin/session -> $session_code (want 200)"
+          test "$session_code" = "200"
+
+          # AllowOverride can fail PARTIALLY on a shared host: routing keeps
+          # working while mod_headers and/or admin/.htaccess's .php-deny
+          # silently stop applying. Nothing breaks visibly when that
+          # happens, so nobody would notice -- check both explicitly on
+          # every real deploy instead of assuming .htaccess "still works
+          # because the site loaded".
+
+          # (a) admin/.htaccess's <FilesMatch "\.php$"> Require-all-denied:
+          # Apache evaluates this against the REQUESTED filename during its
+          # access-control phase, before checking whether the file actually
+          # exists -- so a deliberately nonexistent .php path still answers
+          # 403 while the rule is active, and would fall through to a plain
+          # 404 the moment it silently stopped applying.
+          deny_code=$(curl -s -o /dev/null -w '%{http_code}' "https://thefurnist365.com/admin/__deploy-smoke-test__.php")
+          echo "https://thefurnist365.com/admin/__deploy-smoke-test__.php -> $deny_code (want 403)"
+          test "$deny_code" = "403"
+
+          # (b) mod_headers actually setting Content-Security-Policy on a
+          # real .svg response -- see docs/php-admin-architecture.md section
+          # 8.2's post-review correction and docs/php-admin.md section 5:
+          # this header is the ACTUAL last line of defence against the SVG
+          # scrubber's self-documented blocklist being bypassed, not a
+          # cheap extra layer on top of some other control. Pick any .svg
+          # already shipped under site/assets/img so this keeps working
+          # both before and after that tree becomes server-authoritative.
+          svg_path=$(find site/assets/img -type f -iname '*.svg' | head -n1 || true)
+          if [ -n "$svg_path" ]; then
+            rel_path=${svg_path#site/}
+            csp=$(curl -s -D - -o /dev/null "https://thefurnist365.com/$rel_path" | grep -i '^Content-Security-Policy:' || true)
+            echo "https://thefurnist365.com/$rel_path -> ${csp:-<no CSP header>}"
+            if [ -z "$csp" ]; then
+              echo "CSP header missing on a live .svg response - mod_headers is not applying. Refusing to call this deploy healthy."
+              exit 1
+            fi
+          else
+            echo "no .svg file currently shipped under site/assets/img - skipping the CSP header check this run"
+          fi
