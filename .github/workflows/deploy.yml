@@ -24,9 +24,8 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # The deploy account is chrooted and starts at the jail root, not in the
-  # domain folder, so a relative ./public_html/ points at nothing. Always use
-  # this absolute path.
+  # Absolute path inside the deploy account's chroot. The `cd` below makes a
+  # wrong path fail loudly instead of mirroring somewhere unexpected.
   REMOTE_DIR: /home/sumon/web/thefurnist365.com/public_html/
   # Push events have no inputs; treat them as a real deploy.
   DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}

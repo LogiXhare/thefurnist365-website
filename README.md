@@ -43,10 +43,10 @@ the dry run if unsure, then merge to `main`.
 
 - **SFTP only** (port 22, account `sumon_deploy`, key authentication). FTP/FTPS
   is broken on this server by design — do not use it.
-- Upload target is the **absolute** path
-  `/home/sumon/web/thefurnist365.com/public_html/`. The account is chrooted
-  and starts at the jail root, so a relative `./public_html/` points at
-  nothing. Files placed outside `public_html/` are not served.
+- After login you land in `/home/sumon/web/thefurnist365.com`. Upload into
+  `public_html/` there (the workflow uses the absolute path
+  `/home/sumon/web/thefurnist365.com/public_html/`). Files placed outside
+  `public_html/` are not served.
 - No shell access and no long-running processes. Dynamic features must be PHP
   (PHP 8.3 / PHP-FPM is available). Keep data files and credentials in the
   `private/` folder next to `public_html`, which PHP can reach and the web cannot.
