@@ -1,10 +1,14 @@
 name: Deploy to thefurnist365.com
 
-# Manual only for now. The live site can also be deployed from Sumon's own
-# pipeline, and two automatic deployers mirroring with --delete into the same
-# folder would undo each other. Switch this to `push: branches: [main]` once
-# this repository is the only source of truth.
+# - Push to main that changes site/ -> real deploy to the live site.
+# - Manual run (Actions tab) -> dry run by default: lists what would change,
+#   touches nothing. Untick "dry run" to force a full redeploy of main.
+# Edits to this workflow file or the README alone do not deploy.
 on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -19,16 +23,26 @@ concurrency:
   group: deploy-production
   cancel-in-progress: false
 
+env:
+  # The deploy account is chrooted and starts at the jail root, not in the
+  # domain folder, so a relative ./public_html/ points at nothing. Always use
+  # this absolute path.
+  REMOTE_DIR: /home/sumon/web/thefurnist365.com/public_html/
+  # Push events have no inputs; treat them as a real deploy.
+  DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Sanity-check the site folder
         run: |
           test -f site/index.html || { echo "site/index.html missing - refusing to deploy"; exit 1; }
           echo "files to deploy: $(find site -type f | wc -l)"
+          echo "dry run: $DRY_RUN"
 
       - name: Install lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
@@ -49,21 +63,23 @@ jobs:
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
-          DRY_RUN: ${{ inputs.dry_run }}
         run: |
           # Dry run compares by size only: a fresh checkout gives every file a new
           # mtime, which would otherwise make every file look changed.
+          # A real deploy re-uploads every file, so same-size edits are never missed.
           if [ "$DRY_RUN" = "true" ]; then
             FLAGS="--reverse --delete --verbose --no-perms --ignore-time --dry-run"
           else
             FLAGS="--reverse --delete --verbose --no-perms --parallel=4"
           fi
           lftp -c "set sftp:connect-program 'ssh -a -x -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts'; \
+                   set net:max-retries 2; set net:timeout 30; \
                    open sftp://$SSH_USER:@$SSH_HOST; \
-                   mirror $FLAGS ./site/ ./public_html/"
+                   cd $REMOTE_DIR || exit 1; \
+                   mirror $FLAGS ./site/ $REMOTE_DIR"
 
       - name: Check the live site answers
-        if: ${{ inputs.dry_run == false }}
+        if: env.DRY_RUN != 'true'
         run: |
           code=$(curl -s -o /dev/null -w '%{http_code}' https://thefurnist365.com/)
           echo "https://thefurnist365.com/ -> $code"

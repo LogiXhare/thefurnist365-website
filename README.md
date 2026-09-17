@@ -18,22 +18,35 @@ will be added by the developer. Until then, do not hand-edit
 `site/assets/js/data.js`: it is generated, and the next admin publish
 overwrites it.
 
-## How to redeploy
+## How deploys happen
+
+**Push to `main` that changes anything under `site/` deploys automatically.**
+Edits to only the README, `deploy/` or the workflow file do not deploy.
+
+To check before going live, or to restore the site from `main` at any time:
 
 1. GitHub → **Actions** → **Deploy to thefurnist365.com** → **Run workflow**.
-2. Leave **Dry run** ticked first. The log lists every file that would be
-   uploaded or deleted, and nothing on the server changes.
-3. If that list is what you expect, run it again with **Dry run** unticked.
+2. Leave **Dry run** ticked. The log lists every file that would be uploaded
+   or deleted, and nothing on the server changes.
+3. To force a full redeploy of `main`, run it again with **Dry run** unticked.
 
 The deploy mirrors `site/` into `public_html/` **with `--delete`**: anything on
 the server that is not in `site/` is removed. That is what makes a redeploy
-restore the site exactly, and it is also why the dry run comes first.
+restore the site exactly — and it means **files uploaded to the server by any
+other route (File Manager, a separate pipeline) are deleted on the next
+deploy.** This repository must be the only way files reach `public_html/`.
+
+Suggested flow for bigger changes: work on a branch, open a pull request, run
+the dry run if unsure, then merge to `main`.
 
 ## Server access rules
 
 - **SFTP only** (port 22, account `sumon_deploy`, key authentication). FTP/FTPS
   is broken on this server by design — do not use it.
-- Upload target is `./public_html/`. Files placed one level above it are not served.
+- Upload target is the **absolute** path
+  `/home/sumon/web/thefurnist365.com/public_html/`. The account is chrooted
+  and starts at the jail root, so a relative `./public_html/` points at
+  nothing. Files placed outside `public_html/` are not served.
 - No shell access and no long-running processes. Dynamic features must be PHP
   (PHP 8.3 / PHP-FPM is available). Keep data files and credentials in the
   `private/` folder next to `public_html`, which PHP can reach and the web cannot.
