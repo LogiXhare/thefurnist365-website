@@ -19,7 +19,11 @@ deploy_key*
 id_ed25519*
 id_rsa*
 
-# PHP admin: local dev sandbox (site.json/admin.json/sessions/backups seeded
-# locally). Never deployed, never the same file as data/site.json -- see
-# docs/php-admin.md section 3.
-.dev-private/
+# PHP admin: local dev sandbox(es) (site.json/admin.json/sessions/backups
+# seeded locally). Never deployed, never the same file as data/site.json --
+# see docs/php-admin.md section 3. Globbed (not just the exact ".dev-private/"
+# name) so a differently-named scratch sandbox -- e.g. ".dev-private-review/"
+# used during manual QA/security testing -- can never be committed by
+# accident either; admin.json holds a bcrypt hash, which is not a plaintext
+# secret, but still has no business in git history.
+.dev-private*/

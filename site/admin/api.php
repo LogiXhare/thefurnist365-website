@@ -27,23 +27,69 @@ error_reporting(E_ALL);
 // dirname(__DIR__) from this file's own directory (public_html/admin) is
 // public_html; dirname(__DIR__, 2) is one level above that -- the domain
 // home, where private/ lives as a sibling. See architecture section 2.6.
+// In a git checkout run locally, this file sits at the same relative depth
+// (<repo>/site/admin/api.php), so dirname(__DIR__, 2) resolves to <repo>
+// instead -- used below to auto-detect "am I running from a checkout" so
+// local dev needs no manual code-copying step (see the FC365_LIB_ROOT block).
 define('FC365_PUBLIC_ROOT', dirname(__DIR__));
-$fc365PrivateRoot = dirname(__DIR__, 2) . '/private/furnist365';
+$fc365AboveWebRoot = dirname(__DIR__, 2);
 
-// Local-dev-only override: point FC365_PRIVATE_ROOT at a gitignored
-// .dev-private/ sandbox instead of ever editing this file or hardcoding a
-// second path in config.php. Set the FC365_PRIVATE_ROOT environment
-// variable before starting `php -S 127.0.0.1:5500 -t site` for local
-// development; see docs/php-admin.md. Unset in production, where this is a
-// no-op and the line above (the real prod path) is what takes effect.
-$fc365DevOverride = getenv('FC365_PRIVATE_ROOT');
-if ($fc365DevOverride !== false && trim($fc365DevOverride) !== '') {
-    $fc365PrivateRoot = rtrim(trim($fc365DevOverride), '/\\');
+// This file is the only thing that CAN tell "production" and "a local
+// checkout" apart, so it decides once, here, and every other lib/*.php file
+// just uses the two constants this produces -- see config.php.
+//
+// private-src/lib/config.php is a marker that exists ONLY in a git
+// checkout: production's deploy pipeline ships site/ to public_html/ and
+// private-src/{lib,bin} to private/furnist365/{lib,bin} (two separate SFTP
+// targets, see .github/workflows/deploy.yml) -- it never places a
+// "private-src" directory next to public_html/ on the server. So this
+// check is false in production by construction, not by convention.
+$fc365PrivateSrcLib = $fc365AboveWebRoot . '/private-src/lib';
+$fc365IsCheckout = is_file($fc365PrivateSrcLib . '/config.php');
+
+// ---- Runtime DATA root: site.json, admin.json, ratelimit.json, sessions/,
+// backups/, tmp/. Production has no reliable way to set a process
+// environment variable per PHP-FPM pool on shared hosting, so production
+// MUST work from the plain fallback below with zero configuration. A local
+// checkout defaults to a gitignored .dev-private/ sandbox instead (matching
+// docs/php-admin.md) -- both defaults can still be overridden explicitly
+// with FC365_PRIVATE_ROOT, e.g. to point local dev at a downloaded copy of
+// the real production private/furnist365/.
+$fc365PrivateRoot = $fc365IsCheckout
+    ? ($fc365AboveWebRoot . '/.dev-private')
+    : ($fc365AboveWebRoot . '/private/furnist365');
+$fc365PrivateOverride = getenv('FC365_PRIVATE_ROOT');
+if ($fc365PrivateOverride !== false && trim($fc365PrivateOverride) !== '') {
+    $fc365PrivateRoot = rtrim(trim($fc365PrivateOverride), '/\\');
 }
 define('FC365_PRIVATE_ROOT', $fc365PrivateRoot);
-unset($fc365PrivateRoot, $fc365DevOverride);
 
-require FC365_PRIVATE_ROOT . '/lib/api.php';
+// ---- Application CODE root (lib/). In production, CI syncs
+// private-src/{lib,bin} INTO the same directory FC365_PRIVATE_ROOT points
+// at (private/furnist365/), so code and data live together there -- the
+// fallback below reproduces exactly that layout. In a checkout, lib/ lives
+// at private-src/lib instead and is loaded from there DIRECTLY: never
+// copied into .dev-private/, so there is only ever one copy of the code on
+// a developer's machine and nothing to keep in sync. Overridable with
+// FC365_LIB_ROOT for the rare case of testing the production-style combined
+// layout locally.
+$fc365LibRoot = $fc365IsCheckout ? $fc365PrivateSrcLib : (FC365_PRIVATE_ROOT . '/lib');
+$fc365LibOverride = getenv('FC365_LIB_ROOT');
+if ($fc365LibOverride !== false && trim($fc365LibOverride) !== '') {
+    $fc365LibRoot = rtrim(trim($fc365LibOverride), '/\\');
+}
+define('FC365_LIB_ROOT', $fc365LibRoot);
+unset(
+    $fc365AboveWebRoot,
+    $fc365PrivateSrcLib,
+    $fc365IsCheckout,
+    $fc365PrivateRoot,
+    $fc365PrivateOverride,
+    $fc365LibRoot,
+    $fc365LibOverride
+);
+
+require FC365_LIB_ROOT . '/api.php';
 
 // ---------------------------------------------------------------- request
 /** Mirrors urllib.parse.parse_qs(keep_blank_values=True)[...][0]: first value wins. */

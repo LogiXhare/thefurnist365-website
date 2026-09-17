@@ -24,7 +24,8 @@ uploaded once by hand:
    as typing any other local secret). Minimum 10 characters.
 
    This writes `admin.json` **locally**, under whatever `FC365_PRIVATE_ROOT`
-   currently resolves to (by default `.dev-private/admin.json` — see
+   currently resolves to (by default `<repo>/.dev-private/admin.json` when
+   run from a git checkout, with no environment variable needed — see
    section 3). It does **not** touch production.
 
 2. Upload that one file over SFTP, directly into:
@@ -123,6 +124,40 @@ deliberate historical snapshot, not drift.
 
 Local development never touches production and production never touches it.
 
+### 3.1 Two separate roots: code and data
+
+`site/admin/api.php` resolves two constants on every request, and both have
+a real, working, zero-configuration default when run from a git checkout —
+this was previously documented but not actually implemented for one of the
+two; both are now real:
+
+- **`FC365_LIB_ROOT`** — where `lib/*.php` is loaded from. Auto-detected: if
+  `private-src/lib/config.php` exists two directories above the web root
+  (true in any git checkout, false in production — the deploy pipeline never
+  places a `private-src/` directory next to `public_html/`, see
+  `.github/workflows/deploy.yml`), code loads **directly from
+  `private-src/lib/`**. Nothing is ever copied anywhere for this to work, so
+  there is only ever one copy of the code on a developer's machine and
+  nothing to keep in sync or let drift. In production, this falls back to
+  `FC365_PRIVATE_ROOT/lib` (where CI actually syncs `private-src/lib` to).
+- **`FC365_PRIVATE_ROOT`** — where runtime *data* lives (`site.json`,
+  `admin.json`, `ratelimit.json`, `sessions/`, `backups/`). In a checkout,
+  this defaults to `<repo>/.dev-private` (gitignored). In production, the
+  sibling-of-`public_html` path.
+
+Both defaults can be overridden with an environment variable of the same
+name (`FC365_LIB_ROOT`, `FC365_PRIVATE_ROOT`) if you need to, e.g. to point
+local dev's *data* at a downloaded copy of the real production
+`private/furnist365/` while still loading *code* from `private-src/lib`. You
+will not normally need either variable — see step 2 below.
+
+`private-src/bin/admin-cli.php` only ever runs from a git checkout (there is
+no shell on production to run it from), so it always loads `lib/` from its
+own sibling directory directly; it has no separate "production layout" mode
+and needs no `FC365_LIB_ROOT` equivalent.
+
+### 3.2 Running it
+
 1. Seed a local sandbox once:
 
    ```
@@ -130,45 +165,55 @@ Local development never touches production and production never touches it.
    ```
 
    (gitignored — see `.gitignore`). You do not need to manually copy
-   `data/site.json` into it: the bootstrap flow (`admin/bootstrap.html`
-   against the local PHP server) writes `.dev-private/site.json` for you the
-   first time, the same way it always has. If you want to skip bootstrap
-   during development, copy `data/site.json` to `.dev-private/site.json`
-   by hand instead.
+   `data/site.json` into it, and you do **not** need to copy `private-src/lib`
+   or `private-src/bin` into it either (see 3.1 — code is never copied). The
+   bootstrap flow (`admin/bootstrap.html` against the local PHP server)
+   writes `.dev-private/site.json` for you the first time. If you want to
+   skip bootstrap during development, copy `data/site.json` to
+   `.dev-private/site.json` by hand instead.
 
-2. Run the built-in PHP server from the repo root, pointed at `site/`:
-
-   ```
-   php -S 127.0.0.1:5500 -t site
-   ```
-
-   `FC365_PUBLIC_ROOT` resolves to `site/` automatically (it's always
-   `dirname(__DIR__)` from wherever `admin/api.php` actually is).
-   `FC365_PRIVATE_ROOT` defaults to `<repo>/.dev-private` for both
-   `site/admin/api.php` and `private-src/bin/admin-cli.php` — **no file
-   needs editing** to get this default; it's the fallback when the
-   `FC365_PRIVATE_ROOT` environment variable is unset.
-
-3. To point either tool at a different local sandbox (e.g. to test against a
-   downloaded copy of the real production `private/furnist365/`), set the
-   environment variable before starting either one — never edit
-   `config.php`, which has no hardcoded path to edit in the first place:
+2. Run PHP's built-in server from the repo root, pointed at `site/`, **with
+   the dev router** (`tools/dev-router.php`):
 
    ```
-   FC365_PRIVATE_ROOT=/path/to/sandbox php -S 127.0.0.1:5500 -t site
-   FC365_PRIVATE_ROOT=/path/to/sandbox php private-src/bin/admin-cli.php --check
+   php -S 127.0.0.1:5500 -t site tools/dev-router.php
    ```
 
-4. Set a local admin password and open `http://127.0.0.1:5500/admin/`:
+   The router is required: unlike Apache, `php -S` never reads `.htaccess`,
+   so `site/.htaccess`'s `/api/admin/* -> admin/api.php` rewrite has no
+   effect under the built-in server, and every `/api/admin/*` request would
+   404 even though the application code is completely correct.
+   `tools/dev-router.php` reproduces just that one rewrite for local testing.
+   It is deliberately kept outside `site/` — a router script living inside
+   `site/` would deploy as a second, unprotected, web-reachable PHP file the
+   next time anything under `site/` is pushed, which is exactly the class of
+   bug this whole design exists to structurally rule out. See the comment at
+   the top of `tools/dev-router.php` for the full reasoning.
+
+   No environment variable is needed for the common case: `FC365_PUBLIC_ROOT`
+   resolves to `site/` automatically, and `FC365_LIB_ROOT`/`FC365_PRIVATE_ROOT`
+   both auto-detect the checkout as described in 3.1.
+
+3. Set a local admin password and open `http://127.0.0.1:5500/admin/`:
 
    ```
    php private-src/bin/admin-cli.php --set-admin-password
    ```
 
-5. `php private-src/bin/admin-cli.php --check` validates whatever
+4. `php private-src/bin/admin-cli.php --check` validates whatever
    `site.json` your current `FC365_PRIVATE_ROOT` points at, without needing
    the web server running at all. `--rebuild` regenerates `data.js` from it
    the same way.
+
+5. To point at a different sandbox (e.g. a downloaded copy of the real
+   production `private/furnist365/`), set `FC365_PRIVATE_ROOT` before
+   starting either tool — never edit `config.php`, which has no hardcoded
+   path to edit in the first place:
+
+   ```
+   FC365_PRIVATE_ROOT=/path/to/sandbox php -S 127.0.0.1:5500 -t site tools/dev-router.php
+   FC365_PRIVATE_ROOT=/path/to/sandbox php private-src/bin/admin-cli.php --check
+   ```
 
 `data/site.json` and `.dev-private/` are never the same file and are never
 synced automatically in either direction — see architecture section 2.5 for
