@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product - The Furnist 365</title>
+  <meta name="description" content="Product details, options, specifications and delivery information from The Furnist 365.">
+
+  <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Open+Sans:wght@400&family=Inter:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/product.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body data-fc-nav="popular">
+
+  <a class="fc-skip-link" href="#main">Skip to main content</a>
+
+  <div data-fc-header></div>
+
+  <main class="fc-main" id="main">
+
+    <!-- ================= product ================= -->
+    <div class="fc-single" data-fc-single>
+      <div class="fc-container">
+
+        <nav class="fc-breadcrumbs" style="justify-content:flex-start;margin-bottom:26px" aria-label="Breadcrumb">
+          <span><a href="index.html">Home</a></span>
+          <span><a href="shop.html">Shop</a></span>
+          <span><a data-fc-single-catcrumb href="shop.html">Category</a></span>
+          <span data-fc-single-crumb>Product</span>
+        </nav>
+
+        <div class="fc-single-top">
+          <!-- gallery -->
+          <div class="fc-gallery">
+            <div class="fc-gallery-main" data-fc-gallery-main></div>
+            <div class="fc-gallery-thumbs" data-fc-gallery-thumbs></div>
+          </div>
+
+          <!-- purchase panel -->
+          <div data-fc-single-panel></div>
+        </div>
+
+        <!-- tabs -->
+        <div class="fc-tabs">
+          <div class="fc-tablist" role="tablist" aria-label="Product information">
+            <button class="fc-tab" type="button" role="tab" id="tab-desc"
+                    data-fc-tab="description" aria-selected="true" aria-controls="panel-desc">Description</button>
+            <button class="fc-tab" type="button" role="tab" id="tab-info"
+                    data-fc-tab="info" aria-selected="false" aria-controls="panel-info" tabindex="-1">Additional information</button>
+            <button class="fc-tab" type="button" role="tab" id="tab-delivery"
+                    data-fc-tab="delivery" aria-selected="false" aria-controls="panel-delivery" tabindex="-1">Delivery &amp; Warranty</button>
+          </div>
+
+          <div class="fc-tabpanel" role="tabpanel" id="panel-desc"
+               data-fc-tabpanel="description" data-fc-tab-description aria-labelledby="tab-desc"></div>
+
+          <div class="fc-tabpanel" role="tabpanel" id="panel-info"
+               data-fc-tabpanel="info" data-fc-tab-info aria-labelledby="tab-info" hidden></div>
+
+          <div class="fc-tabpanel" role="tabpanel" id="panel-delivery"
+               data-fc-tabpanel="delivery" aria-labelledby="tab-delivery" hidden>
+            <h3>Delivery</h3>
+            <p>Products are delivered nationwide across Bangladesh. Delivery cost depends on the item and destination and is confirmed when the order is placed. Inside Dhaka, assembly is handled by our own team.</p>
+            <h3>Warranty</h3>
+            <p>Every item carries a manufacturing warranty against material and workmanship defects. Warranty terms vary by product and are listed under <em>Additional information</em>.</p>
+            <h3>Returns</h3>
+            <p>Return and refund requests follow the policies linked in the site footer. For anything urgent, call the hotline listed on the product panel.</p>
+            <p class="fc-muted" style="font-size:13px">Note: this is a front-end replica, so no order is actually placed from these pages.</p>
+          </div>
+        </div>
+
+        <!-- related -->
+        <section>
+          <h2 class="fc-divider-title">Related products</h2>
+          <div class="fc-products-grid" data-fc-related></div>
+        </section>
+
+      </div>
+    </div>
+
+    <!-- ================= not found ================= -->
+    <div class="fc-notfound" data-fc-notfound hidden>
+      <div class="fc-container">
+        <h1>Product not found</h1>
+        <p data-fc-notfound-msg class="fc-muted"></p>
+        <p><a class="fc-btn" href="shop.html">Back to shop</a></p>
+      </div>
+    </div>
+
+  </main>
+
+  <div data-fc-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/product.js"></script>
+</body>
+</html>

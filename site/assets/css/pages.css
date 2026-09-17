@@ -1,0 +1,238 @@
+/* ==========================================================================
+   pages.css — about, contact, dealer, catalogue
+   ========================================================================== */
+
+/* ---------------- shared intro block ---------------- */
+.fc-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 44px;
+  align-items: center;
+}
+.fc-intro-media img {
+  width: 100%;
+  border-radius: var(--fc-radius);
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background-color: var(--fc-alt-bg);
+}
+.fc-intro-body h2 { margin-bottom: 14px; }
+.fc-intro-body p { line-height: 1.85; }
+
+.fc-prose { line-height: 1.85; }
+.fc-prose h2 { margin-top: 34px; }
+.fc-prose h2:first-child { margin-top: 0; }
+.fc-prose ul { padding-left: 20px; }
+.fc-prose li { margin-bottom: 8px; }
+
+/* ---------------- stat row ---------------- */
+.fc-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--fc-gap);
+}
+.fc-stat {
+  padding: 26px 22px;
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+  border: 1px solid var(--fc-border);
+  text-align: center;
+}
+.fc-stat strong {
+  display: block;
+  font-family: var(--fc-font-title);
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--fc-primary-ink);
+  line-height: 1.15;
+}
+.fc-stat span {
+  display: block;
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--fc-text-soft);
+}
+
+/* ---------------- feature / benefit cards ---------------- */
+.fc-feature {
+  padding: 26px 24px 28px;
+  border: 1px solid var(--fc-border);
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+  height: 100%;
+}
+.fc-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background-color: var(--fc-alt-bg);
+  color: var(--fc-primary-ink);
+}
+.fc-feature-icon svg { width: 22px; height: 22px; }
+.fc-feature h3 { margin: 0 0 8px; font-size: 16px; }
+.fc-feature p { margin: 0; font-size: 14px; color: var(--fc-text-soft); line-height: 1.7; }
+
+/* ---------------- numbered steps ---------------- */
+.fc-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--fc-gap);
+  counter-reset: fc-step;
+}
+.fc-step {
+  position: relative;
+  padding: 28px 22px 24px;
+  border: 1px solid var(--fc-border);
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+}
+.fc-step::before {
+  counter-increment: fc-step;
+  content: counter(fc-step);
+  position: absolute;
+  top: -16px;
+  left: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--fc-primary);
+  color: var(--fc-on-primary);
+  font-family: var(--fc-font-title);
+  font-size: 14px;
+  font-weight: 600;
+}
+.fc-step h3 { margin: 6px 0 7px; font-size: 15px; }
+.fc-step p { margin: 0; font-size: 13.5px; color: var(--fc-text-soft); line-height: 1.7; }
+
+/* ---------------- office / contact cards ---------------- */
+.fc-office-card {
+  padding: 28px 26px 30px;
+  border: 1px solid var(--fc-border);
+  border-top: 3px solid var(--fc-primary);
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+  height: 100%;
+}
+.fc-office-card h2 { margin: 0 0 16px; font-size: 18px; }
+.fc-office-list { margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.fc-office-list li {
+  display: flex;
+  gap: 11px;
+  margin-bottom: 13px;
+  line-height: 1.65;
+}
+.fc-office-list li:last-child { margin-bottom: 0; }
+.fc-office-list svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+  margin-top: 3px;
+  color: var(--fc-primary-ink);
+}
+.fc-office-list strong { color: var(--fc-title); }
+.fc-office-list a:hover { color: var(--fc-primary-ink); }
+/* long emails / addresses must break rather than push the layout wide */
+.fc-office-list span,
+.fc-office-list a { min-width: 0; overflow-wrap: anywhere; }
+
+/* ---------------- forms on content pages ---------------- */
+.fc-form-card {
+  padding: 32px 34px 36px;
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+  border: 1px solid var(--fc-border);
+  box-shadow: var(--fc-shadow);
+}
+.fc-form-card h2 { margin: 0 0 6px; font-size: 21px; }
+.fc-form-lead { margin: 0 0 24px; color: var(--fc-text-soft); font-size: 14px; }
+
+.fc-form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
+}
+.fc-form-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ---------------- showroom ---------------- */
+.fc-hours { margin: 0; padding: 0; list-style: none; font-size: 14px; }
+.fc-hours li {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--fc-border);
+}
+.fc-hours li:last-child { border-bottom: 0; }
+.fc-hours span:last-child { color: var(--fc-title); font-weight: 500; }
+
+/* ---------------- catalogue cards ---------------- */
+.fc-cat-download {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--fc-border);
+  border-radius: var(--fc-radius);
+  background-color: #fff;
+  height: 100%;
+}
+.fc-cat-download-media {
+  aspect-ratio: 4 / 3;
+  background-color: var(--fc-alt-bg);
+  overflow: hidden;
+}
+.fc-cat-download-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.fc-cat-download:hover .fc-cat-download-media img { transform: scale(1.05); }
+.fc-cat-download-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 24px;
+  flex: 1 1 auto;
+}
+.fc-cat-download-body h3 { margin: 0; font-size: 16px; }
+.fc-cat-download-body p {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 13.5px;
+  color: var(--fc-text-soft);
+  line-height: 1.7;
+}
+.fc-cat-download-body .fc-btn { align-self: flex-start; }
+.fc-cat-download-meta {
+  font-size: 12px;
+  color: var(--fc-text-soft);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ---------------- responsive ---------------- */
+@media (max-width: 1024px) {
+  .fc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fc-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 860px) {
+  .fc-intro { grid-template-columns: 1fr; gap: 26px; }
+  .fc-form-row,
+  .fc-form-row-3 { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .fc-form-card { padding: 22px 18px 26px; }
+  .fc-stats { grid-template-columns: 1fr; }
+  .fc-steps { grid-template-columns: 1fr; }
+  .fc-office-card { padding: 22px 18px 24px; }
+}

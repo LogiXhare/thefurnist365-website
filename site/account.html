@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Account - The Furnist 365</title>
+  <meta name="description" content="Your demo account dashboard at The Furnist 365.">
+
+  <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Open+Sans:wght@400&family=Inter:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/cart-page.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body data-fc-nav="">
+
+  <a class="fc-skip-link" href="#main">Skip to main content</a>
+
+  <div data-fc-header></div>
+
+  <main class="fc-main" id="main">
+
+    <div class="fc-page-title">
+      <div class="fc-container">
+        <h1>My Account</h1>
+        <nav class="fc-breadcrumbs" aria-label="Breadcrumb">
+          <span><a href="index.html">Home</a></span>
+          <span>My Account</span>
+        </nav>
+      </div>
+    </div>
+
+    <div class="fc-cart-page" data-fc-account>
+      <div class="fc-container">
+
+        <!-- ============ not signed in ============ -->
+        <div data-fc-account-guest hidden>
+          <div class="fc-content-narrow">
+            <div class="fc-notice">
+              <strong>You need to sign in to view your account.</strong><br>
+              This is a front-end demo account &mdash; the login check runs entirely in your browser.
+            </div>
+            <p>
+              <a class="fc-btn fc-btn-lg" href="login.html">Go to login</a>
+              <a class="fc-btn fc-btn-lg fc-btn-outline" href="login.html?tab=register" style="margin-left:8px">Register</a>
+            </p>
+            <p class="fc-muted" style="font-size:13px">
+              Demo credentials: <strong>demo@furnish365.com</strong> / <strong>demo1234</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ dashboard ============ -->
+        <div data-fc-account-dash hidden>
+          <h2 style="margin-bottom:22px" data-fc-account-greeting>Hello</h2>
+
+          <div class="fc-account-layout">
+
+            <aside class="fc-account-card" aria-label="Account details">
+              <div data-fc-account-profile></div>
+              <button class="fc-btn fc-btn-sm fc-btn-dark fc-btn-block" type="button" data-fc-logout style="margin-top:20px">Log out</button>
+            </aside>
+
+            <div>
+              <div class="fc-account-stats" data-fc-account-stats></div>
+
+              <div class="fc-account-card" style="margin-bottom:22px">
+                <h2>Recent activity</h2>
+                <div data-fc-account-activity></div>
+              </div>
+
+              <div class="fc-account-card" style="margin-bottom:22px">
+                <h2>Our offices</h2>
+                <div class="fc-account-offices" data-fc-account-offices></div>
+              </div>
+
+              <div class="fc-notice">
+                <strong>Front-end demo account.</strong> There is no server behind this page &mdash;
+                your session, cart and wishlist live in this browser&rsquo;s local storage only,
+                and no order history exists yet.
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <div data-fc-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/cart-page.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shop - The Furnist 365</title>
+  <meta name="description" content="Browse The Furnist 365 products - beds, wardrobes, cupboards, dressing tables, sofas, dining and office furniture.">
+
+  <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Open+Sans:wght@400&family=Inter:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/shop.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body data-fc-nav="popular">
+
+  <a class="fc-skip-link" href="#main">Skip to main content</a>
+
+  <div data-fc-header></div>
+
+  <main class="fc-main" id="main">
+
+    <div class="fc-page-title">
+      <div class="fc-container">
+        <h1 data-fc-shop-heading>Shop</h1>
+        <nav class="fc-breadcrumbs" aria-label="Breadcrumb">
+          <span><a href="index.html">Home</a></span>
+          <span data-fc-shop-crumb>Shop</span>
+        </nav>
+      </div>
+    </div>
+
+    <div class="fc-shop">
+      <div class="fc-container">
+        <div class="fc-shop-layout">
+
+          <!-- ================= sidebar filters ================= -->
+          <aside class="fc-shop-sidebar" data-fc-shop-sidebar aria-label="Product filters">
+
+            <div class="fc-widget">
+              <h2 class="fc-widget-title">Product Categories</h2>
+              <ul class="fc-cat-list" data-fc-shop-cats></ul>
+            </div>
+
+            <div class="fc-widget" data-fc-brand-widget>
+              <h2 class="fc-widget-title">Brand</h2>
+              <ul class="fc-brand-list" data-fc-shop-brands></ul>
+            </div>
+
+            <div class="fc-widget">
+              <h2 class="fc-widget-title">Filter by Price</h2>
+              <div class="fc-price-inputs">
+                <div>
+                  <label class="fc-visually-hidden" for="filter-min">Minimum price</label>
+                  <input class="fc-input" type="number" id="filter-min" min="0" step="100" inputmode="numeric">
+                </div>
+                <span class="fc-price-dash" aria-hidden="true">&ndash;</span>
+                <div>
+                  <label class="fc-visually-hidden" for="filter-max">Maximum price</label>
+                  <input class="fc-input" type="number" id="filter-max" min="0" step="100" inputmode="numeric">
+                </div>
+              </div>
+              <p class="fc-price-hint" data-fc-price-hint></p>
+              <button class="fc-btn fc-btn-sm fc-btn-block" type="button" data-fc-price-apply>Apply price</button>
+            </div>
+
+            <div class="fc-widget">
+              <h2 class="fc-widget-title">Series</h2>
+              <div class="fc-check-list">
+                <label class="fc-checkbox"><input type="checkbox" data-fc-series="popular"><span>Popular series</span></label>
+                <label class="fc-checkbox"><input type="checkbox" data-fc-series="premium"><span>Premium series</span></label>
+                <label class="fc-checkbox"><input type="checkbox" data-fc-series="flagship"><span>Flagship series</span></label>
+              </div>
+            </div>
+
+            <div class="fc-widget">
+              <h2 class="fc-widget-title">Filter by Size</h2>
+              <div class="fc-check-list">
+                <label class="fc-checkbox"><input type="checkbox" data-fc-size="Single"><span>Single</span></label>
+                <label class="fc-checkbox"><input type="checkbox" data-fc-size="Semi-Double"><span>Semi-Double</span></label>
+                <label class="fc-checkbox"><input type="checkbox" data-fc-size="Double"><span>Double</span></label>
+                <label class="fc-checkbox"><input type="checkbox" data-fc-size="King"><span>King</span></label>
+              </div>
+            </div>
+
+            <div class="fc-filter-actions">
+              <button class="fc-btn fc-btn-sm fc-btn-outline fc-btn-block" type="button" data-fc-clear-filters>Clear all filters</button>
+            </div>
+          </aside>
+
+          <!-- ================= results ================= -->
+          <div>
+            <div class="fc-shop-toolbar">
+              <span class="fc-shop-count" data-fc-shop-count aria-live="polite"></span>
+
+              <div class="fc-toolbar-right">
+                <button class="fc-btn fc-btn-sm fc-btn-outline fc-filter-toggle" type="button"
+                        data-fc-filter-toggle aria-expanded="false">Show filters</button>
+
+                <div class="fc-sort-wrap">
+                  <label for="shop-sort">Sort by</label>
+                  <select class="fc-select" id="shop-sort" data-fc-sort>
+                    <option value="default">Default sorting</option>
+                    <option value="price-asc">Price: low to high</option>
+                    <option value="price-desc">Price: high to low</option>
+                    <option value="name-asc">Name: A to Z</option>
+                    <option value="name-desc">Name: Z to A</option>
+                  </select>
+                </div>
+
+                <div class="fc-cols-toggle" role="group" aria-label="Grid columns">
+                  <button class="fc-cols-btn" type="button" data-fc-cols="2" aria-label="Two columns">2</button>
+                  <button class="fc-cols-btn" type="button" data-fc-cols="3" aria-label="Three columns">3</button>
+                  <button class="fc-cols-btn" type="button" data-fc-cols="4" aria-label="Four columns">4</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="fc-chips" data-fc-chips></div>
+
+            <div class="fc-shop-grid" data-fc-shop-grid></div>
+
+            <div class="fc-empty-state" data-fc-shop-empty hidden>
+              <p>No products matched your filters.</p>
+              <button class="fc-btn fc-btn-sm" type="button" data-fc-clear-filters>Clear all filters</button>
+            </div>
+
+            <nav class="fc-pagination" data-fc-pagination aria-label="Pagination" hidden>
+              <button class="fc-page-btn" type="button" disabled>Prev</button>
+              <button class="fc-page-btn is-active" type="button" aria-current="page">1</button>
+              <button class="fc-page-btn" type="button" disabled>Next</button>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div data-fc-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/shop.js"></script>
+</body>
+</html>

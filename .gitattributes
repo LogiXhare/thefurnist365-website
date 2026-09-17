@@ -1,0 +1,2 @@
+# Keep every file byte-identical to what is served live (no CRLF conversion).
+* -text

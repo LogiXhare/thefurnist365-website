@@ -1,0 +1,225 @@
+/* ==========================================================================
+   footer.css — newsletter strip, footer columns, copyright bar,
+                back-to-top, floating contact buttons
+   ========================================================================== */
+
+/* ---------------- dealer / catalogue banners ---------------- */
+.fc-cta-banners {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--fc-gap);
+}
+.fc-cta-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 230px;
+  padding: 38px 40px;
+  border-radius: var(--fc-radius);
+  background: var(--fc-alt-bg) center/cover no-repeat;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.fc-cta-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.66) 0%, rgba(0, 0, 0, 0.25) 100%);
+}
+.fc-cta-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--fc-font-header);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.85;
+}
+.fc-cta-banner h3 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  color: #fff;
+}
+.fc-cta-banner p {
+  margin: 0 0 20px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 14px;
+}
+.fc-cta-banner .fc-btn { align-self: flex-start; }
+
+/* ---------------- footer ---------------- */
+.fc-footer {
+  background-color: var(--fc-footer-bg);
+  border-top: 1px solid var(--fc-border);
+  color: var(--fc-text);
+  font-size: 14px;
+}
+
+.fc-footer-main {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr 1fr 1.3fr;
+  gap: 34px;
+  padding-block: 52px 40px;
+}
+
+.fc-footer-title {
+  margin: 0 0 18px;
+  font-family: var(--fc-font-title);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fc-entities-title);
+}
+
+.fc-footer-list { margin: 0; padding: 0; list-style: none; }
+.fc-footer-list li { margin-bottom: 9px; }
+.fc-footer-list a { color: var(--fc-text); font-size: 14px; }
+.fc-footer-list a:hover { color: var(--fc-primary-ink); padding-left: 3px; }
+
+.fc-footer-contact { margin: 0; padding: 0; list-style: none; }
+.fc-footer-contact li {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+.fc-footer-contact svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 3px;
+  color: var(--fc-primary-ink);
+}
+.fc-footer-contact a { color: var(--fc-text); }
+.fc-footer-contact a:hover { color: var(--fc-primary-ink); }
+/* long emails / addresses must break rather than push the layout wide */
+.fc-footer-contact span,
+.fc-footer-contact a { min-width: 0; overflow-wrap: anywhere; }
+.fc-footer-contact strong { color: var(--fc-entities-title); font-weight: 600; }
+
+.fc-footer-brand { display: inline-block; margin-bottom: 18px; }
+.fc-footer-about {
+  margin: 0 0 18px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--fc-text-soft);
+}
+
+/* social */
+.fc-socials { display: flex; gap: 8px; }
+.fc-social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #fff;
+  border: 1px solid var(--fc-border-strong);
+  color: var(--fc-title);
+}
+.fc-social:hover {
+  background-color: var(--fc-primary);
+  border-color: var(--fc-primary);
+  color: var(--fc-on-primary);
+}
+.fc-social svg { width: 16px; height: 16px; }
+
+/* ---------------- copyright bar ---------------- */
+.fc-footer-bottom {
+  border-top: 1px solid var(--fc-border);
+  padding-block: 18px;
+}
+.fc-footer-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fc-gap);
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--fc-text-soft);
+}
+.fc-footer-bottom-inner strong { color: var(--fc-entities-title); }
+.fc-payments img { max-height: 30px; width: auto; }
+
+/* ---------------- clients strip ---------------- */
+.fc-clients {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+}
+.fc-client {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border: 1px solid var(--fc-border);
+  border-radius: var(--fc-form-radius);
+  background-color: #fff;
+  min-height: 88px;
+}
+.fc-client img {
+  max-height: 54px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(100%);
+  opacity: 0.72;
+  transition: filter var(--fc-transition), opacity var(--fc-transition);
+}
+.fc-client:hover img { filter: none; opacity: 1; }
+
+/* ---------------- back to top ---------------- */
+.fc-to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 84px;
+  z-index: 400;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--fc-dark-bg);
+  color: #fff;
+  box-shadow: var(--fc-shadow);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--fc-transition), visibility var(--fc-transition),
+              background-color var(--fc-transition);
+}
+.fc-to-top.is-visible { opacity: 1; visibility: visible; }
+.fc-to-top:hover { background-color: var(--fc-primary); color: var(--fc-on-primary); }
+.fc-to-top svg { width: 18px; height: 18px; }
+
+/* ---------------- floating contact ---------------- */
+.fc-float-contact {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 400;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fc-float-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #25d366;
+  color: #fff;
+  box-shadow: var(--fc-shadow-lg);
+  transition: transform var(--fc-transition);
+}
+.fc-float-btn:hover { transform: scale(1.06); color: #fff; }
+.fc-float-btn svg { width: 24px; height: 24px; }
+/* the call button is the one orange plate here — it keeps the ink on hover too */
+.fc-float-btn-call,
+.fc-float-btn-call:hover { background-color: var(--fc-primary); color: var(--fc-on-primary); }

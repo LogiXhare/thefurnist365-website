@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login &amp; Register - The Furnist 365</title>
+  <meta name="description" content="Sign in to your account at The Furnist 365 or register a new one.">
+
+  <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Open+Sans:wght@400&family=Inter:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/auth.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body data-fc-nav="">
+
+  <a class="fc-skip-link" href="#main">Skip to main content</a>
+
+  <div data-fc-header></div>
+
+  <main class="fc-main" id="main">
+
+    <div class="fc-page-title">
+      <div class="fc-container">
+        <h1>My Account</h1>
+        <nav class="fc-breadcrumbs" aria-label="Breadcrumb">
+          <span><a href="index.html">Home</a></span>
+          <span>My Account</span>
+        </nav>
+      </div>
+    </div>
+
+    <section class="fc-auth" data-fc-auth>
+      <div class="fc-container">
+        <div class="fc-auth-grid">
+
+          <!-- ============ login / register card ============ -->
+          <div class="fc-auth-card">
+            <div class="fc-auth-head">
+              <h1 data-fc-auth-heading style="font-size:26px">Login to your account</h1>
+              <p data-fc-auth-sub>Welcome back. Enter your details to continue.</p>
+            </div>
+
+            <div class="fc-auth-tabs" role="tablist" aria-label="Login or register">
+              <button type="button" class="fc-auth-tab" role="tab" id="tab-login"
+                      data-fc-auth-tab="login" aria-selected="true" aria-controls="panel-login">Login</button>
+              <button type="button" class="fc-auth-tab" role="tab" id="tab-register"
+                      data-fc-auth-tab="register" aria-selected="false" aria-controls="panel-register" tabindex="-1">Register</button>
+            </div>
+
+            <!-- ---------- login panel ---------- -->
+            <div class="fc-auth-panel" role="tabpanel" id="panel-login"
+                 data-fc-auth-panel="login" aria-labelledby="tab-login">
+
+              <div class="fc-notice" data-fc-login-notice hidden role="status"></div>
+
+              <form class="fc-auth-form" data-fc-login-form novalidate>
+                <div class="fc-field">
+                  <label class="fc-label" for="login-email">Email address <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="email" id="login-email" name="email"
+                         autocomplete="email" placeholder="you@example.com"
+                         aria-describedby="login-email-error">
+                  <span class="fc-field-error" id="login-email-error"></span>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-label" for="login-password">Password <span class="fc-req">*</span></label>
+                  <div class="fc-password-wrap">
+                    <input class="fc-input" type="password" id="login-password" name="password"
+                           autocomplete="current-password" placeholder="Your password"
+                           aria-describedby="login-password-error">
+                    <button type="button" class="fc-password-toggle"
+                            data-fc-password-toggle="login-password" aria-label="Show password">Show</button>
+                  </div>
+                  <span class="fc-field-error" id="login-password-error"></span>
+                </div>
+
+                <div class="fc-auth-meta">
+                  <label class="fc-checkbox">
+                    <input type="checkbox" id="login-remember" name="remember">
+                    <span>Remember me</span>
+                  </label>
+                  <a class="fc-auth-forgot" href="contact.html">Lost your password?</a>
+                </div>
+
+                <button class="fc-btn fc-btn-block fc-btn-lg" type="submit">Login</button>
+
+                <p class="fc-auth-hint">
+                  No account yet?
+                  <a href="#register" data-fc-goto="register" style="color:var(--fc-primary-ink);font-weight:600">Create one here</a>.
+                </p>
+              </form>
+            </div>
+
+            <!-- ---------- register panel ---------- -->
+            <div class="fc-auth-panel" role="tabpanel" id="panel-register"
+                 data-fc-auth-panel="register" aria-labelledby="tab-register" hidden>
+
+              <div class="fc-notice" data-fc-register-notice hidden role="status"></div>
+
+              <form class="fc-auth-form" data-fc-register-form novalidate>
+                <div class="fc-auth-row">
+                  <div class="fc-field">
+                    <label class="fc-label" for="reg-first">First name <span class="fc-req">*</span></label>
+                    <input class="fc-input" type="text" id="reg-first" name="first"
+                           autocomplete="given-name" aria-describedby="reg-first-error">
+                    <span class="fc-field-error" id="reg-first-error"></span>
+                  </div>
+                  <div class="fc-field">
+                    <label class="fc-label" for="reg-last">Last name <span class="fc-req">*</span></label>
+                    <input class="fc-input" type="text" id="reg-last" name="last"
+                           autocomplete="family-name" aria-describedby="reg-last-error">
+                    <span class="fc-field-error" id="reg-last-error"></span>
+                  </div>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-label" for="reg-email">Email address <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="email" id="reg-email" name="email"
+                         autocomplete="email" placeholder="you@example.com"
+                         aria-describedby="reg-email-error">
+                  <span class="fc-field-error" id="reg-email-error"></span>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-label" for="reg-phone">Mobile number <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="tel" id="reg-phone" name="phone"
+                         autocomplete="tel" placeholder="01XXXXXXXXX"
+                         aria-describedby="reg-phone-error">
+                  <span class="fc-field-error" id="reg-phone-error"></span>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-label" for="reg-password">Password <span class="fc-req">*</span></label>
+                  <div class="fc-password-wrap">
+                    <input class="fc-input" type="password" id="reg-password" name="password"
+                           autocomplete="new-password" aria-describedby="reg-password-error">
+                    <button type="button" class="fc-password-toggle"
+                            data-fc-password-toggle="reg-password" aria-label="Show password">Show</button>
+                  </div>
+                  <div data-fc-strength>
+                    <div class="fc-strength">
+                      <span class="fc-strength-seg"></span>
+                      <span class="fc-strength-seg"></span>
+                      <span class="fc-strength-seg"></span>
+                      <span class="fc-strength-seg"></span>
+                    </div>
+                    <p class="fc-strength-label">Use at least 8 characters.</p>
+                  </div>
+                  <span class="fc-field-error" id="reg-password-error"></span>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-label" for="reg-confirm">Confirm password <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="password" id="reg-confirm" name="confirm"
+                         autocomplete="new-password" aria-describedby="reg-confirm-error">
+                  <span class="fc-field-error" id="reg-confirm-error"></span>
+                </div>
+
+                <div class="fc-field">
+                  <label class="fc-checkbox">
+                    <input type="checkbox" id="reg-terms" name="terms">
+                    <span>I accept the terms and conditions <span class="fc-req">*</span></span>
+                  </label>
+                  <span class="fc-field-error" id="reg-terms-error"></span>
+                </div>
+
+                <button class="fc-btn fc-btn-block fc-btn-lg" type="submit">Register</button>
+
+                <p class="fc-auth-hint">
+                  Your data is stored only in this browser. Nothing is sent to a server.
+                </p>
+              </form>
+            </div>
+          </div>
+
+          <!-- ============ demo credentials aside ============ -->
+          <aside class="fc-auth-aside">
+            <div class="fc-demo-box">
+              <h2>Demo login</h2>
+              <p>This is a front-end-only replica, so there is no real authentication server. Use these credentials to sign in:</p>
+              <ul class="fc-demo-creds">
+                <li><span>Email</span><span>demo@furnish365.com</span></li>
+                <li><span>Password</span><span>demo1234</span></li>
+              </ul>
+              <button class="fc-btn fc-btn-light" type="button" data-fc-fill-demo>Fill demo credentials</button>
+            </div>
+
+            <div class="fc-auth-note">
+              <h3>How the demo account works</h3>
+              <ul>
+                <li>The login check runs in your browser against <code>assets/js/data.js</code>.</li>
+                <li>Accounts you register are saved in <code>localStorage</code> only, on this machine.</li>
+                <li>Your session, cart and wishlist all persist until you clear browser data.</li>
+                <li>No passwords are transmitted anywhere &mdash; there is no backend yet.</li>
+              </ul>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div data-fc-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact Us - The Furnist 365</title>
+  <meta name="description" content="Contact The Furnist 365 - office address in Uttara, Dhaka, hotline, WhatsApp, email and showroom visit information.">
+
+  <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,600&family=Open+Sans:wght@400&family=Inter:wght@500;600&display=swap">
+
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/header.css">
+  <link rel="stylesheet" href="assets/css/pages.css">
+  <link rel="stylesheet" href="assets/css/footer.css">
+  <link rel="stylesheet" href="assets/css/responsive.css">
+</head>
+<body data-fc-nav="">
+
+  <a class="fc-skip-link" href="#main">Skip to main content</a>
+
+  <div data-fc-header></div>
+
+  <main class="fc-main" id="main">
+
+    <div class="fc-page-title">
+      <div class="fc-container">
+        <h1>Contact Us</h1>
+        <nav class="fc-breadcrumbs" aria-label="Breadcrumb">
+          <span><a href="index.html">Home</a></span>
+          <span>Contact Us</span>
+        </nav>
+      </div>
+    </div>
+
+    <!-- ================= offices ================= -->
+    <section class="fc-section">
+      <div class="fc-container">
+        <div class="fc-grid fc-grid-2" data-fc-offices></div>
+      </div>
+    </section>
+
+    <!-- ================= form ================= -->
+    <section class="fc-section fc-section-alt">
+      <div class="fc-container">
+        <div class="fc-grid fc-grid-2" style="align-items:start;gap:34px">
+
+          <div class="fc-form-card">
+            <h2>Send us a message</h2>
+            <p class="fc-form-lead">Tell us what you are looking for and we will point you to the right product or project team.</p>
+
+            <div class="fc-notice" id="contact-notice" hidden role="status"></div>
+
+            <form data-fc-form data-fc-notice="#contact-notice" novalidate>
+              <div class="fc-form-row">
+                <div class="fc-field">
+                  <label class="fc-label" for="c-name">Your name <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="text" id="c-name" data-required data-label="Your name" autocomplete="name">
+                  <span class="fc-field-error" id="c-name-error"></span>
+                </div>
+                <div class="fc-field">
+                  <label class="fc-label" for="c-phone">Mobile number <span class="fc-req">*</span></label>
+                  <input class="fc-input" type="tel" id="c-phone" data-required data-label="Mobile number" placeholder="01XXXXXXXXX" autocomplete="tel">
+                  <span class="fc-field-error" id="c-phone-error"></span>
+                </div>
+              </div>
+
+              <div class="fc-field">
+                <label class="fc-label" for="c-email">Email address <span class="fc-req">*</span></label>
+                <input class="fc-input" type="email" id="c-email" data-required data-label="Email address" autocomplete="email">
+                <span class="fc-field-error" id="c-email-error"></span>
+              </div>
+
+              <div class="fc-field">
+                <label class="fc-label" for="c-subject">Subject <span class="fc-req">*</span></label>
+                <select class="fc-select" id="c-subject" data-required data-label="Subject">
+                  <option value="">Choose a subject</option>
+                  <option>Product enquiry</option>
+                  <option>Interior / project enquiry</option>
+                  <option>Corporate or bulk order</option>
+                  <option>Dealership</option>
+                  <option>Delivery or warranty</option>
+                  <option>Something else</option>
+                </select>
+                <span class="fc-field-error" id="c-subject-error"></span>
+              </div>
+
+              <div class="fc-field">
+                <label class="fc-label" for="c-message">Message <span class="fc-req">*</span></label>
+                <textarea class="fc-textarea" id="c-message" data-required data-label="Message" placeholder="What can we help you with?"></textarea>
+                <span class="fc-field-error" id="c-message-error"></span>
+              </div>
+
+              <button class="fc-btn fc-btn-lg" type="submit">Send message</button>
+
+              <p class="fc-muted" style="font-size:12.5px;margin:16px 0 0">
+                This is a front-end replica &mdash; the form validates your input but does not
+                send anything. Use the hotline or email above to reach the company for real.
+              </p>
+            </form>
+          </div>
+
+          <div>
+            <!-- ============ showroom ============ -->
+            <div class="fc-office-card" id="showroom">
+              <h2>Visit a showroom</h2>
+              <p style="font-size:14px;line-height:1.75;margin-bottom:16px">
+                Furniture is easier to judge in person. Come see the finish, open the drawers and
+                check the sizes before you decide. Our showroom is at the office address above &mdash;
+                House 30, Road 7, Sector 14, Uttara (6th Floor, Flat 2A). Call ahead if you want a
+                specific piece on display.
+              </p>
+              <ul class="fc-hours">
+                <li><span>Saturday &ndash; Thursday</span><span>10:00 &ndash; 20:00</span></li>
+                <li><span>Friday</span><span>15:00 &ndash; 20:00</span></li>
+                <li><span>Government holidays</span><span>Closed</span></li>
+              </ul>
+              <p style="margin:18px 0 0">
+                <a class="fc-btn fc-btn-sm" href="tel:+8801600144705">Call before visiting</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div data-fc-footer></div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/pages.js"></script>
+</body>
+</html>

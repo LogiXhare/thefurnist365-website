@@ -1,0 +1,70 @@
+name: Deploy to thefurnist365.com
+
+# Manual only for now. The live site can also be deployed from Sumon's own
+# pipeline, and two automatic deployers mirroring with --delete into the same
+# folder would undo each other. Switch this to `push: branches: [main]` once
+# this repository is the only source of truth.
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: list what would change, touch nothing on the server"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sanity-check the site folder
+        run: |
+          test -f site/index.html || { echo "site/index.html missing - refusing to deploy"; exit 1; }
+          echo "files to deploy: $(find site -type f | wc -l)"
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Prepare SSH key and pinned host key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          # Strip CR: a key pasted or piped from Windows can carry CRLF endings,
+          # which OpenSSH rejects as "invalid format".
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          cp deploy/known_hosts ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Sync site/ to public_html/
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          # Dry run compares by size only: a fresh checkout gives every file a new
+          # mtime, which would otherwise make every file look changed.
+          if [ "$DRY_RUN" = "true" ]; then
+            FLAGS="--reverse --delete --verbose --no-perms --ignore-time --dry-run"
+          else
+            FLAGS="--reverse --delete --verbose --no-perms --parallel=4"
+          fi
+          lftp -c "set sftp:connect-program 'ssh -a -x -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts'; \
+                   open sftp://$SSH_USER:@$SSH_HOST; \
+                   mirror $FLAGS ./site/ ./public_html/"
+
+      - name: Check the live site answers
+        if: ${{ inputs.dry_run == false }}
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' https://thefurnist365.com/)
+          echo "https://thefurnist365.com/ -> $code"
+          test "$code" = "200"

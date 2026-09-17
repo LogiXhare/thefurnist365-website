@@ -1,0 +1,152 @@
+/* ==========================================================================
+   responsive.css — breakpoints. Load LAST so it can override page styles.
+   Breakpoints: 1200 / 1024 / 860 / 640 / 420
+   ========================================================================== */
+
+/* ---------------- <= 1200px ---------------- */
+@media (max-width: 1200px) {
+  .fc-nav-link { padding: 0 10px; font-size: 12px; }
+  .fc-navbar-aside { display: none; }
+  .fc-search { max-width: 420px; }
+  .fc-header-inner { gap: 18px; }
+}
+
+/* ---------------- <= 1024px : swap desktop nav for the drawer ---------------- */
+@media (max-width: 1024px) {
+  :root { --fc-header-h: 76px; }
+
+  .fc-navbar { display: none; }
+  .fc-navbar-spacer { display: none !important; }
+
+  .fc-topbar-left { display: none; }
+  .fc-topbar-inner { justify-content: center; }
+
+  .fc-logo { margin-right: auto; }
+  .fc-logo-lg { height: 56px; }
+
+  .fc-search { display: none; }
+  .fc-mobile-search-toggle { display: inline-flex; }
+  .fc-tool .fc-tool-text { display: none; }
+
+  /* homepage */
+  .fc-categories { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fc-products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fc-inspiration { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fc-usps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .fc-series-media { min-height: 280px; }
+  .fc-series-body { padding: 34px 30px; }
+
+  .fc-hero-arrow { width: 40px; height: 40px; }
+  .fc-hero-prev { left: 12px; }
+  .fc-hero-next { right: 12px; }
+
+  /* footer */
+  .fc-footer-main { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
+
+  /* generic page shells */
+  .fc-shop-layout { grid-template-columns: 1fr; }
+  .fc-modal-body { grid-template-columns: 1fr; }
+}
+
+/* ---------------- <= 860px ---------------- */
+@media (max-width: 860px) {
+  .fc-section { padding-block: 44px; }
+
+  h1 { font-size: 32px; }
+  h2 { font-size: 26px; }
+  .fc-section-title { font-size: 24px; }
+
+  .fc-section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .fc-categories { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fc-products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* stack the series rows, image first */
+  .fc-series-row { grid-template-columns: 1fr; }
+  .fc-series-row:nth-child(even) .fc-series-media { order: 0; }
+  .fc-series-media { min-height: 230px; }
+
+  .fc-cta-banners { grid-template-columns: 1fr; }
+  .fc-cta-banner { padding: 30px 26px; min-height: 200px; }
+
+  .fc-clients { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+
+  .fc-hero-track { height: clamp(340px, 60vw, 460px); }
+}
+
+/* ---------------- <= 640px ---------------- */
+@media (max-width: 640px) {
+  :root {
+    --fc-header-h: 64px;
+    --fc-gap: 14px;
+  }
+
+  .fc-container { padding-inline: 14px; }
+  .fc-section { padding-block: 34px; }
+
+  /* from here down .fc-logo-lg is the tower mark, not the stacked lockup —
+     see the <picture> source in components.js, which switches at this width */
+  .fc-logo-lg { height: 46px; }
+
+  /* keep burger + logo + 4 tools inside a ~400px row */
+  .fc-header-inner { gap: 8px; }
+  .fc-header-tools { gap: 0; margin-right: 4px; }
+  .fc-tool { padding: 5px; }
+  .fc-tool svg { width: 22px; height: 22px; }
+  .fc-count-bubble { top: -4px; right: -4px; }
+  .fc-burger { width: 38px; }
+
+  .fc-topbar { font-size: 11px; }
+  .fc-topbar-right { gap: 10px; }
+  .fc-topbar-sep { display: none; }
+
+  .fc-usps { grid-template-columns: 1fr; }
+  .fc-inspiration { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .fc-product-body { padding: 12px 8px 16px; }
+  .fc-product-title { font-size: 13.5px; }
+  .fc-price { font-size: 13.5px; }
+  .fc-product-note { display: none; }
+
+  .fc-hero-arrow { display: none; }
+  .fc-hero-title { font-size: 26px; }
+  .fc-hero-content { max-width: 100%; }
+
+  .fc-footer-main { grid-template-columns: 1fr; padding-block: 34px 26px; }
+  .fc-footer-bottom-inner { justify-content: center; text-align: center; }
+
+  .fc-modal-dialog { padding: 22px 18px; }
+  .fc-to-top { bottom: 78px; right: 14px; }
+  .fc-float-contact { right: 14px; bottom: 14px; }
+  .fc-float-btn { width: 44px; height: 44px; }
+
+  .fc-minicart { width: 100%; }
+}
+
+/* ---------------- <= 420px ---------------- */
+@media (max-width: 420px) {
+  .fc-products-grid { grid-template-columns: 1fr; }
+  .fc-categories { grid-template-columns: 1fr; }
+  .fc-inspiration { grid-template-columns: 1fr; }
+  .fc-btn { padding: 11px 20px; font-size: 11px; }
+  .fc-hero-track { height: 380px; }
+  .fc-logo-lg { height: 42px; }
+  .fc-hero-title { font-size: 24px; }
+}
+
+/* ---------------- print ---------------- */
+@media print {
+  .fc-header-wrap,
+  .fc-drawer,
+  .fc-minicart,
+  .fc-overlay,
+  .fc-to-top,
+  .fc-float-contact,
+  .fc-search-modal { display: none !important; }
+  body { color: #000; }
+}

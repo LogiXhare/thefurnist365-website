@@ -1,0 +1,102 @@
+/* ==========================================================================
+   layout.css — containers, grids, section rhythm
+   ========================================================================== */
+
+.fc-container {
+  width: 100%;
+  max-width: var(--fc-container);
+  margin: 0 auto;
+  padding-inline: 16px;
+}
+.fc-container-wide { max-width: 1600px; }
+
+/* ---------- section rhythm ---------- */
+.fc-section { padding-block: 60px; }
+.fc-section-sm { padding-block: 36px; }
+.fc-section-alt { background-color: var(--fc-alt-bg); }
+
+.fc-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--fc-gap);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.fc-section-head-center {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.fc-section-title {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--fc-title);
+}
+.fc-section-sub {
+  margin: 6px 0 0;
+  color: var(--fc-text-soft);
+  font-size: 15px;
+}
+.fc-section-eyebrow {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--fc-font-header);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fc-primary-ink);
+}
+
+/* ---------- grid ---------- */
+.fc-grid { display: grid; gap: var(--fc-gap); }
+.fc-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.fc-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fc-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.fc-grid-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+
+/* ---------- flex helpers ---------- */
+.fc-row { display: flex; align-items: center; gap: var(--fc-gap-sm); }
+.fc-row-between { display: flex; align-items: center; justify-content: space-between; gap: var(--fc-gap); }
+.fc-wrap { flex-wrap: wrap; }
+.fc-spacer { flex: 1 1 auto; }
+
+/* ---------- page shell ---------- */
+.fc-main { min-height: 40vh; }
+
+.fc-page-title {
+  padding-block: 40px;
+  background-color: var(--fc-alt-bg);
+  text-align: center;
+}
+.fc-page-title h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+}
+
+.fc-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--fc-text-soft);
+}
+.fc-breadcrumbs a { color: var(--fc-text-soft); }
+.fc-breadcrumbs a:hover { color: var(--fc-primary-ink); }
+.fc-breadcrumbs span:not(:last-child)::after {
+  content: "/";
+  margin-left: 8px;
+  opacity: 0.55;
+}
+
+/* ---------- two-column content shells ---------- */
+.fc-shop-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+.fc-content-narrow { max-width: 780px; margin: 0 auto; }
