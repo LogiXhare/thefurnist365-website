@@ -37,6 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Build assets/js/data.js from data/site.json
+        run: python3 build/render_data_js.py
+
       - name: Sanity-check the site folder
         run: |
           test -f site/index.html || { echo "site/index.html missing - refusing to deploy"; exit 1; }

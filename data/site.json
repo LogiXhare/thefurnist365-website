@@ -1,19 +1,10 @@
-/* GENERATED FILE - do not edit. Source: data/site.json.
-   Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 73 | 2026-09-16T20:12:20Z */
-(function (window) {
-  "use strict";
-
-  function slug(str) {
-    return String(str)
-      .toLowerCase()
-      .replace(/[\u2019']/g, "")
-      .replace(/&/g, "and")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
-
-  var SITE = {
+{
+  "_meta": {
+    "schema": 1,
+    "rev": 73,
+    "updatedAt": "2026-09-16T20:12:20Z"
+  },
+  "site": {
     "name": "The Furnist 365",
     "tagline": "Home, Office, and Hospital Solution",
     "legalName": "The Furnist 365",
@@ -54,8 +45,8 @@
         "icon": "linkedin"
       }
     ]
-  };
-  var MENU = [
+  },
+  "menu": [
     {
       "label": "Premium",
       "href": "shop.html?cat=premium",
@@ -831,8 +822,8 @@
         }
       ]
     }
-  ];
-  var HERO = [
+  ],
+  "hero": [
     {
       "title": "Transform Your Living Space",
       "text": "Elegant furniture for modern homes.",
@@ -865,8 +856,8 @@
       "image": "assets/img/hero/hero-4.webp",
       "align": "left"
     }
-  ];
-  var CATEGORIES = [
+  ],
+  "categories": [
     {
       "label": "Living Room",
       "slug": "living",
@@ -897,8 +888,8 @@
       "slug": "sofa-set",
       "image": "assets/img/category/sofa-set.jpg"
     }
-  ];
-  var SERIES = [
+  ],
+  "series": [
     {
       "eyebrow": "Popular Series",
       "title": "Designed for everyday living",
@@ -926,14 +917,8 @@
       "image": "assets/img/category/series-flagship.jpeg",
       "slug": "flagship"
     }
-  ];
-  var BED_SIZES = [
-    "Single",
-    "Semi-Double",
-    "Double",
-    "King"
-  ];
-  var PRODUCTS = [
+  ],
+  "products": [
     {
       "id": "sof-7010p",
       "brand": "aurelio",
@@ -1096,9 +1081,9 @@
       "variable": true,
       "series": "popular",
       "badge": "New",
-      "swatches": BED_SIZES,
+      "swatches": "@bedSizes",
       "options": {
-        "Size": BED_SIZES
+        "Size": "@bedSizes"
       },
       "short": "Panel bed with an upholstered headboard, available in four standard mattress sizes.",
       "material": "Engineered wood with lacquer finish",
@@ -1233,9 +1218,9 @@
       ],
       "variable": true,
       "series": "popular",
-      "swatches": BED_SIZES,
+      "swatches": "@bedSizes",
       "options": {
-        "Size": BED_SIZES
+        "Size": "@bedSizes"
       },
       "short": "Classic panel bed with a solid headboard, in four mattress sizes.",
       "material": "Engineered wood with lacquer finish",
@@ -1268,8 +1253,8 @@
       "dimensions": "W 54\" x D 22\" x H 82\"",
       "warranty": "1 year manufacturing warranty"
     }
-  ];
-  var BRANDS = [
+  ],
+  "brands": [
     {
       "name": "Aurelio",
       "slug": "aurelio",
@@ -1480,8 +1465,8 @@
       "categoryLabel": "Sofa Set",
       "logo": "assets/img/brands/comfora.svg"
     }
-  ];
-  var CLIENTS = [
+  ],
+  "clients": [
     {
       "name": "ACI",
       "image": "assets/img/client/aci.png"
@@ -1614,8 +1599,8 @@
       "name": "United Group",
       "image": "assets/img/client/united-group.png"
     }
-  ];
-  var FOOTER_LINKS = [
+  ],
+  "footerLinks": [
     {
       "title": "The Company",
       "items": [
@@ -1670,24 +1655,16 @@
         }
       ]
     }
-  ];
-  var DEMO_USER = {
+  ],
+  "demoUser": {
     "email": "demo@furnish365.com",
     "password": "demo1234",
     "name": "Demo Customer"
-  };
-
-  window.FC_DATA = {
-    slug: slug,
-    site: SITE,
-    menu: MENU,
-    hero: HERO,
-    categories: CATEGORIES,
-    series: SERIES,
-    products: PRODUCTS,
-    brands: BRANDS,
-    clients: CLIENTS,
-    footerLinks: FOOTER_LINKS,
-    demoUser: DEMO_USER
-  };
-})(window);
+  },
+  "bedSizes": [
+    "Single",
+    "Semi-Double",
+    "Double",
+    "King"
+  ]
+}

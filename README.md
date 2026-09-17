@@ -8,15 +8,31 @@ Hosted on `earth.wetechi.com` (HestiaCP), user `sumon`, docroot `public_html`.
 | Path | What it is |
 |---|---|
 | `site/` | Exactly what gets served at https://thefurnist365.com/ — copied into `public_html/` on deploy |
+| `data/site.json` | Single source of truth for site content (menu, products, prices, images, site info). Not deployed directly — `build/render_data_js.py` turns it into `site/assets/js/data.js`. |
+| `build/render_data_js.py` | The build step. Runs automatically in CI before every deploy; also runnable locally (`python3 build/render_data_js.py`). |
+| `docs/api-admin.md` | The admin API contract — every endpoint, request/response shape, and validation rule the admin panel implements. Language-agnostic; this is what any admin backend (the in-progress PHP one included) must match. |
 | `deploy/known_hosts` | Pinned SSH host key of `earth.wetechi.com`, so CI refuses to talk to any other server |
-| `.github/workflows/deploy.yml` | Manual deploy over SFTP |
+| `.github/workflows/deploy.yml` | Deploy over SFTP: builds `data.js`, then mirrors `site/` to `public_html/` |
 
-**Current state:** `site/` is a snapshot of the live site taken on 17 Sep 2026
-(132 files). The editable source — `data/site.json`, the build step that
-generates `site/assets/js/data.js`, and the admin panel — is not here yet and
-will be added by the developer. Until then, do not hand-edit
-`site/assets/js/data.js`: it is generated, and the next admin publish
-overwrites it.
+**Current state (2026-09-18):** `site/` matches the live site, now generated
+from `data/site.json` rather than hand-maintained. **Do not hand-edit
+`site/assets/js/data.js`** — it is generated, and the next build overwrites
+it; edit `data/site.json` instead.
+
+An admin/CMS panel (lets a non-developer edit products, prices, images and
+the menu through a browser instead of editing `data/site.json` by hand)
+exists and is fully built, but only as a **Python** backend so far — it runs
+great on a developer's own machine, but this hosting account has no way to
+run a persistent process, so it cannot go live here as-is. **A PHP port of
+that same backend is in progress**, since PHP 8.3/PHP-FPM is available on
+this account and needs no persistent process. It will land under
+`site/admin/` (web-reachable, so PHP-FPM can serve it) with its runtime data
+and admin credentials written to `private/` (outside `public_html/`, never
+reachable by any URL) rather than committed to this repo. It has not been
+pushed yet because it has not yet been through the same
+review-and-security-audit pass as the Python version — that version found
+and fixed a real critical vulnerability before it ever went live, so the
+PHP port is getting the same treatment before it does either.
 
 ## How deploys happen
 
