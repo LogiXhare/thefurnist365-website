@@ -27,6 +27,11 @@ env:
   # Absolute path inside the deploy account's chroot. The `cd` below makes a
   # wrong path fail loudly instead of mirroring somewhere unexpected.
   REMOTE_DIR: /home/sumon/web/thefurnist365.com/public_html/
+  # Sibling of public_html/, never inside it -- categorically unreachable by
+  # any URL. Holds the PHP admin's application code (lib/, bin/) plus its
+  # runtime data (site.json, admin.json, sessions/, backups/), the latter
+  # never touched by CI -- see the "Sync private-src/" step below.
+  REMOTE_PRIVATE_DIR: /home/sumon/web/thefurnist365.com/private/furnist365/
   # Push events have no inputs; treat them as a real deploy.
   DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
 
@@ -43,6 +48,8 @@ jobs:
       - name: Sanity-check the site folder
         run: |
           test -f site/index.html || { echo "site/index.html missing - refusing to deploy"; exit 1; }
+          test -f site/admin/api.php || { echo "site/admin/api.php missing - refusing to deploy"; exit 1; }
+          test -f private-src/lib/api.php || { echo "private-src/lib/api.php missing - refusing to deploy"; exit 1; }
           echo "files to deploy: $(find site -type f | wc -l)"
           echo "dry run: $DRY_RUN"
 
@@ -61,6 +68,36 @@ jobs:
           cp deploy/known_hosts ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
+      - name: Sync private-src/ to private/furnist365/ (app code only, never --delete)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          # This mirrors ONLY private-src/ (which contains exactly lib/ and
+          # bin/ -- no other files) into private/furnist365/, a sibling of
+          # public_html/ on the same account, reusing the same SSH key and
+          # pinned known_hosts as the site sync below -- a second `mirror`
+          # against a different remote directory, not a new credential.
+          #
+          # Deliberately NOT --delete: private/furnist365/ also holds
+          # site.json, admin.json, ratelimit.json, sessions/ and backups/ --
+          # server-authoritative runtime data this workflow must never see,
+          # let alone remove. Because the local source tree (private-src/)
+          # contains only lib/ and bin/, a non-delete, reverse-only mirror
+          # can only ever create or update files under private/furnist365/
+          # {lib,bin}/; it has no way to touch or delete anything else in
+          # that directory even by accident.
+          if [ "$DRY_RUN" = "true" ]; then
+            FLAGS="--reverse --verbose --no-perms --ignore-time --dry-run"
+          else
+            FLAGS="--reverse --verbose --no-perms --parallel=4"
+          fi
+          lftp -c "set sftp:connect-program 'ssh -a -x -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts'; \
+                   set net:max-retries 2; set net:timeout 30; \
+                   open sftp://$SSH_USER:@$SSH_HOST; \
+                   mkdir -p $REMOTE_PRIVATE_DIR; \
+                   mirror $FLAGS ./private-src/ $REMOTE_PRIVATE_DIR"
+
       - name: Sync site/ to public_html/
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
@@ -69,10 +106,19 @@ jobs:
           # Dry run compares by size only: a fresh checkout gives every file a new
           # mtime, which would otherwise make every file look changed.
           # A real deploy re-uploads every file, so same-size edits are never missed.
+          #
+          # Excludes, added once the admin panel went live: assets/js/data.js
+          # is regenerated in place by every admin Save, and assets/img/** is
+          # where every admin-uploaded image lands -- neither exists in this
+          # exact form in the git working tree after go-live. Without these
+          # excludes, the next routine code deploy's --delete mirror would
+          # silently revert every live content edit and delete every
+          # live-uploaded image. See docs/php-admin-architecture.md section 2.4.
+          EXCLUDES="--exclude-glob assets/js/data.js --exclude-glob assets/img/"
           if [ "$DRY_RUN" = "true" ]; then
-            FLAGS="--reverse --delete --verbose --no-perms --ignore-time --dry-run"
+            FLAGS="--reverse --delete --verbose --no-perms --ignore-time --dry-run $EXCLUDES"
           else
-            FLAGS="--reverse --delete --verbose --no-perms --parallel=4"
+            FLAGS="--reverse --delete --verbose --no-perms --parallel=4 $EXCLUDES"
           fi
           lftp -c "set sftp:connect-program 'ssh -a -x -i $HOME/.ssh/deploy_key -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$HOME/.ssh/known_hosts'; \
                    set net:max-retries 2; set net:timeout 30; \

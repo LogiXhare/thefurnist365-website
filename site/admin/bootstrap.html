@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Seed data/site.json</title>
+<style>
+  body { font: 15px/1.6 system-ui, sans-serif; max-width: 46rem; margin: 3rem auto; padding: 0 1rem; }
+  pre  { background: #f4f4f5; padding: 1rem; border-radius: 6px; white-space: pre-wrap; }
+  button { font: inherit; padding: .6rem 1.2rem; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>Seed <code>data/site.json</code></h1>
+<p>
+  This runs once. It reads <code>window.FC_DATA</code> straight out of the
+  hand-written <code>assets/js/data.js</code> and POSTs it to
+  <code>/api/admin/bootstrap</code>, so the seed is byte-faithful to what the
+  storefront renders today. The server refuses once <code>data/site.json</code> exists.
+</p>
+<button id="go" type="button">Seed it</button>
+<pre id="out">ready</pre>
+
+<!-- The ONLY script this page loads, so nothing can mutate FC_DATA first. -->
+<script src="../assets/js/data.js"></script>
+<script>
+function seed() {
+  var out = document.getElementById("out");
+  out.textContent = "posting...";
+  return fetch("/api/admin/bootstrap", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: { "Content-Type": "application/json", "X-FC-Admin": "1" },
+    body: JSON.stringify({ data: JSON.parse(JSON.stringify(window.FC_DATA)) })
+  })
+    .then(function (r) { return r.json().then(function (j) { return [r.status, j]; }); })
+    .then(function (pair) { out.textContent = pair[0] + "\n" + JSON.stringify(pair[1], null, 2); })
+    .catch(function (e) { out.textContent = "failed: " + e; });
+}
+document.getElementById("go").addEventListener("click", seed);
+/* Open .../bootstrap.html#auto to seed without a click (used by the release check). */
+if (location.hash === "#auto") { seed(); }
+</script>
+</body>
+</html>

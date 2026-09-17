@@ -18,3 +18,8 @@ __pycache__/
 deploy_key*
 id_ed25519*
 id_rsa*
+
+# PHP admin: local dev sandbox (site.json/admin.json/sessions/backups seeded
+# locally). Never deployed, never the same file as data/site.json -- see
+# docs/php-admin.md section 3.
+.dev-private/

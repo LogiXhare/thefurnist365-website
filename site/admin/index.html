@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin — The Furnist 365</title>
+  <link rel="icon" href="../assets/img/brand/favicon.svg" type="image/svg+xml">
+
+  <!-- Storefront tokens and components, reused verbatim. admin.css loads last
+       so it wins on source order.
+       responsive.css is deliberately NOT loaded: at <=420px it shrinks .fc-btn
+       to a 41px box, under the 44px touch floor this panel holds. The admin
+       declares its own breakpoints in admin.css. -->
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="assets/admin.css">
+</head>
+<body class="ad-body">
+
+<!-- ====================== boot / blocking ====================== -->
+<div class="ad-boot" id="ad-boot">
+  <img src="../assets/img/brand/logo-mark.svg" alt="" width="34" height="44">
+  <p>Loading the admin panel…</p>
+</div>
+
+<!-- Filled by app.js for 503 no_admin_password and 503 store_unreadable. -->
+<div class="ad-boot" id="ad-blocking" hidden></div>
+
+<!-- ====================== login ====================== -->
+<section class="ad-login" id="ad-login" hidden>
+  <div class="ad-login-card">
+    <div class="ad-login-brand">
+      <img src="../assets/img/brand/logo-mark.svg" alt="The Furnist 365" width="34" height="44">
+      <span class="ad-plate">ADMIN</span>
+    </div>
+    <h1>Admin sign in</h1>
+    <p class="ad-login-sub">Manage The Furnist 365 content.</p>
+
+    <!-- The error lives here, above the field, not in a toast: a failed sign-in
+         has to survive a re-read. -->
+    <div class="fc-notice fc-notice-error" id="ad-login-error" role="alert" hidden></div>
+
+    <form id="ad-login-form" novalidate>
+      <div class="fc-field">
+        <label class="fc-label" for="ad-login-password">Admin password <span class="ad-req">*</span></label>
+        <div class="ad-pw">
+          <input class="fc-input" id="ad-login-password" name="password" type="password"
+                 autocomplete="current-password" required>
+          <button class="fc-password-toggle" type="button" id="ad-login-toggle"
+                  aria-label="Show the password" aria-pressed="false">Show</button>
+        </div>
+      </div>
+      <button class="fc-btn fc-btn-lg fc-btn-block" type="submit" id="ad-login-submit">Sign in</button>
+    </form>
+
+    <p class="ad-login-foot">
+      There is no username — one password opens the panel.<br>
+      Lost it? Set a new one on the server with
+      <code>python serve.py --set-admin-password</code><br>
+      <a href="../index.html">&larr; Back to the website</a>
+    </p>
+  </div>
+</section>
+
+<!-- ====================== shell ====================== -->
+<div class="ad-shell" id="ad-shell" hidden>
+
+  <!-- ---------- sidebar ---------- -->
+  <aside class="ad-sidebar" id="ad-sidebar">
+    <div class="ad-sidebar-head">
+      <img src="../assets/img/brand/logo-mark.svg" alt="" width="21" height="28">
+      <span class="ad-brandname">Furnist 365</span>
+      <span class="ad-plate">ADMIN</span>
+    </div>
+
+    <nav class="ad-nav" id="ad-nav" aria-label="Sections">
+      <p class="ad-nav-label" id="ad-nav-overview">Overview</p>
+      <ul class="ad-nav-group" aria-labelledby="ad-nav-overview">
+        <li>
+          <a class="ad-nav-link" href="#/" data-ad-nav="dashboard">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </a>
+        </li>
+      </ul>
+
+      <p class="ad-nav-label" id="ad-nav-shop">Shop</p>
+      <ul class="ad-nav-group" aria-labelledby="ad-nav-shop">
+        <li>
+          <a class="ad-nav-link" href="#/products" data-ad-nav="products">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M3 8l2-4h14l2 4"/></svg>
+            Products <span class="ad-nav-count" data-ad-count="products"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/brands" data-ad-nav="brands">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 12 12 3l9 9-9 9Z"/><circle cx="12" cy="12" r="2.2"/></svg>
+            Brands <span class="ad-nav-count" data-ad-count="brands"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/categories" data-ad-nav="categories">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+            Categories <span class="ad-nav-count" data-ad-count="categories"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/series" data-ad-nav="series">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h9"/></svg>
+            Series <span class="ad-nav-count" data-ad-count="series"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/bedsizes" data-ad-nav="bedSizes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M3 18v-7h18v7"/><path d="M3 11V6h7v5"/><path d="M14 11V6h7v5"/></svg>
+            Bed sizes <span class="ad-nav-count" data-ad-count="bedSizes"></span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="ad-nav-label" id="ad-nav-site">Site</p>
+      <ul class="ad-nav-group" aria-labelledby="ad-nav-site">
+        <li>
+          <a class="ad-nav-link" href="#/menu" data-ad-nav="menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            Menu <span class="ad-nav-count" data-ad-count="menu"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/hero" data-ad-nav="hero">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 15 5-4 4 3 3-2 6 4"/></svg>
+            Hero slides <span class="ad-nav-count" data-ad-count="hero"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/footer" data-ad-nav="footerLinks">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 14h18"/></svg>
+            Footer links <span class="ad-nav-count" data-ad-count="footerLinks"></span>
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/clients" data-ad-nav="clients">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 20c0-3.2 2.5-5 5.5-5s5.5 1.8 5.5 5"/><path d="M16 5.5a3 3 0 0 1 0 5.8"/><path d="M17.5 15c2 .6 3 2.3 3 5"/></svg>
+            Clients <span class="ad-nav-count" data-ad-count="clients"></span>
+          </a>
+        </li>
+      </ul>
+
+      <p class="ad-nav-label" id="ad-nav-settings">Settings</p>
+      <ul class="ad-nav-group" aria-labelledby="ad-nav-settings">
+        <li>
+          <a class="ad-nav-link" href="#/site" data-ad-nav="site">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V9l8-5 8 5v11"/><path d="M9 20v-6h6v6"/></svg>
+            Company info
+          </a>
+        </li>
+        <li>
+          <a class="ad-nav-link" href="#/maintenance" data-ad-nav="maintenance">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16v12H4Z"/><path d="M9 7V4h6v3"/><path d="M8 13h8"/></svg>
+            Backups &amp; password
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <div class="ad-scrim" id="ad-scrim" hidden></div>
+
+  <!-- ---------- main ---------- -->
+  <div class="ad-main">
+    <header class="ad-topbar">
+      <button class="ad-burger" type="button" id="ad-burger"
+              aria-label="Open the sections menu" aria-controls="ad-sidebar" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <span class="ad-topbar-title" id="ad-topbar-title">Dashboard</span>
+
+      <div class="ad-topbar-actions">
+        <!-- one instance, aria-live, never colour alone: every state has its
+             own glyph and its own words -->
+        <span class="ad-status" id="ad-status" aria-live="polite">
+          <span class="ad-status-text">All changes saved</span>
+        </span>
+
+        <a class="fc-btn fc-btn-sm fc-btn-outline" href="../index.html" target="_blank" rel="noopener"
+           title="Open the website in a new tab">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          <span class="ad-viewsite-label">View site</span>
+          <span class="fc-visually-hidden">(opens in a new tab)</span>
+        </a>
+
+        <button class="ad-user" type="button" id="ad-user" aria-haspopup="true" aria-expanded="false">
+          <span class="ad-user-avatar" aria-hidden="true">A</span>
+          <span class="ad-user-name">
+            <b>Owner</b>
+            <small id="ad-user-since">signed in</small>
+          </span>
+          <span class="fc-visually-hidden">Account menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- persistent page-level banners (save failed, validation summary,
+         restored draft). A toast would disappear and she would think it saved. -->
+    <div class="ad-banners" id="ad-banners"></div>
+
+    <main id="ad-pages">
+      <section class="ad-page" data-ad-page="dashboard"    hidden></section>
+      <section class="ad-page" data-ad-page="products"     hidden></section>
+      <section class="ad-page" data-ad-page="brands"       hidden></section>
+      <section class="ad-page" data-ad-page="categories"   hidden></section>
+      <section class="ad-page" data-ad-page="series"       hidden></section>
+      <section class="ad-page" data-ad-page="bedSizes"     hidden></section>
+      <section class="ad-page" data-ad-page="menu"         hidden></section>
+      <section class="ad-page" data-ad-page="hero"         hidden></section>
+      <section class="ad-page" data-ad-page="footerLinks"  hidden></section>
+      <section class="ad-page" data-ad-page="clients"      hidden></section>
+      <section class="ad-page" data-ad-page="site"         hidden></section>
+      <section class="ad-page" data-ad-page="maintenance"  hidden></section>
+      <section class="ad-page" data-ad-page="notfound"     hidden></section>
+    </main>
+  </div>
+</div>
+
+<div class="fc-toast-stack" id="ad-toasts" aria-live="polite"></div>
+<div id="ad-modal-root"></div>
+
+<!-- No assets/js/data.js here, ever: it is a GENERATED file. The panel reads
+     the authoritative document from /api/admin/data. -->
+<!-- api.js and app.js define the namespace the screen modules register into;
+     app.js boots on DOMContentLoaded, i.e. after every module below has
+     registered its page. -->
+<script src="assets/js/api.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/images.js"></script>
+<script src="assets/js/list-editor.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/menu.js"></script>
+<script src="assets/js/site.js"></script>
+<script src="assets/js/auth.js"></script>
+</body>
+</html>

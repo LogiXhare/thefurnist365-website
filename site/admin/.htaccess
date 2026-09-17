@@ -1,0 +1,17 @@
+# Belt and braces (not load-bearing on their own — see the note below).
+#
+# The architectural answer to "what stops a URL reaching PHP source or
+# secrets" is that there is nothing sensitive under public_html/ at all: no
+# config.php, no store.php, no site.json, no admin.json, no session files —
+# none of it exists anywhere under the web root, in any form, at any path.
+# See docs/php-admin-architecture.md section 8.2. These two rules are a
+# cheap second layer on top of that, not a substitute for it: even if a
+# future developer drops a stray second .php file into this directory by
+# mistake, it is denied by default, and only api.php itself is ever granted.
+
+<FilesMatch "\.php$">
+    Require all denied
+</FilesMatch>
+<Files "api.php">
+    Require all granted
+</Files>
