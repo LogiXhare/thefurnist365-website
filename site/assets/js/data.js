@@ -1,6 +1,6 @@
 /* GENERATED FILE - do not edit. Source: data/site.json.
    Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 78 | 2026-09-19T15:14:40Z */
+/* rev 79 | 2026-09-19T16:55:54Z */
 (function (window) {
   "use strict";
 
@@ -936,7 +936,7 @@
   var PRODUCTS = [
     {
       "id": "sof-7010p",
-      "brand": "aurelio",
+      "brand": "",
       "name": "Sofa Set (SOF-7010P)",
       "sku": "SOF-7010P",
       "category": "living",
@@ -967,7 +967,7 @@
     },
     {
       "id": "tds-514r-lq",
-      "brand": "dormio",
+      "brand": "",
       "name": "Dressing Table (TDS-514R-LQ)",
       "sku": "TDS-514R-LQ",
       "category": "bedroom",
@@ -995,7 +995,7 @@
     },
     {
       "id": "wrd-514r-lq",
-      "brand": "silvana",
+      "brand": "",
       "name": "Wardrobe (WRD-514R-LQ)",
       "sku": "WRD-514R-LQ",
       "category": "bedroom",
@@ -1022,7 +1022,7 @@
     },
     {
       "id": "cub-514-lq",
-      "brand": "nocturne",
+      "brand": "",
       "name": "Cupboard (CUB-514-LQ)",
       "sku": "CUB-514-LQ",
       "category": "bedroom",
@@ -1053,7 +1053,7 @@
     },
     {
       "id": "tbs-514r-lq",
-      "brand": "restwell",
+      "brand": "",
       "name": "Bed Side Table (TBS-514R-LQ)",
       "sku": "TBS-514R-LQ",
       "category": "bedroom",
@@ -1079,7 +1079,7 @@
     },
     {
       "id": "bwd-514r-lq",
-      "brand": "amarante",
+      "brand": "",
       "name": "Bed (BWD-514R-LQ)",
       "sku": "BWD-514R-LQ",
       "category": "bedroom",
@@ -1107,7 +1107,7 @@
     },
     {
       "id": "tbs-513r-lq",
-      "brand": "dormio",
+      "brand": "",
       "name": "Bed Side Table (TBS-513R-LQ)",
       "sku": "TBS-513R-LQ",
       "category": "bedroom",
@@ -1133,7 +1133,7 @@
     },
     {
       "id": "tds-513r-lq",
-      "brand": "silvana",
+      "brand": "",
       "name": "Dressing Table (TDS-513R-LQ)",
       "sku": "TDS-513R-LQ",
       "category": "bedroom",
@@ -1160,7 +1160,7 @@
     },
     {
       "id": "wrd-513r-lq",
-      "brand": "nocturne",
+      "brand": "",
       "name": "Wardrobe (WRD-513R-LQ)",
       "sku": "WRD-513R-LQ",
       "category": "bedroom",
@@ -1187,7 +1187,7 @@
     },
     {
       "id": "cub-513-lq",
-      "brand": "restwell",
+      "brand": "",
       "name": "Cupboard (CUB-513-LQ)",
       "sku": "CUB-513-LQ",
       "category": "bedroom",
@@ -1217,7 +1217,7 @@
     },
     {
       "id": "bwd-513-lq",
-      "brand": "amarante",
+      "brand": "",
       "name": "Bed (BWD-513-LQ)",
       "sku": "BWD-513-LQ",
       "category": "bedroom",
@@ -1244,7 +1244,7 @@
     },
     {
       "id": "wrd-512r-lq",
-      "brand": "dormio",
+      "brand": "",
       "name": "Wardrobe (WRD-512R-LQ)",
       "sku": "WRD-512R-LQ",
       "category": "bedroom",
@@ -1269,218 +1269,7 @@
       "warranty": "1 year manufacturing warranty"
     }
   ];
-  var BRANDS = [
-    {
-      "name": "Aurelio",
-      "slug": "aurelio",
-      "category": "living",
-      "categoryLabel": "Living Room",
-      "logo": "assets/img/brands/aurelio.svg"
-    },
-    {
-      "name": "Northwood",
-      "slug": "northwood",
-      "category": "living",
-      "categoryLabel": "Living Room",
-      "logo": "assets/img/brands/northwood.svg"
-    },
-    {
-      "name": "Lumenhaus",
-      "slug": "lumenhaus",
-      "category": "living",
-      "categoryLabel": "Living Room",
-      "logo": "assets/img/brands/lumenhaus.svg"
-    },
-    {
-      "name": "Verdant",
-      "slug": "verdant",
-      "category": "living",
-      "categoryLabel": "Living Room",
-      "logo": "assets/img/brands/verdant.svg"
-    },
-    {
-      "name": "Casapure",
-      "slug": "casapure",
-      "category": "living",
-      "categoryLabel": "Living Room",
-      "logo": "assets/img/brands/casapure.svg"
-    },
-    {
-      "name": "Dormio",
-      "slug": "dormio",
-      "category": "bedroom",
-      "categoryLabel": "Bed Room",
-      "logo": "assets/img/brands/dormio.svg"
-    },
-    {
-      "name": "Silvana",
-      "slug": "silvana",
-      "category": "bedroom",
-      "categoryLabel": "Bed Room",
-      "logo": "assets/img/brands/silvana.svg"
-    },
-    {
-      "name": "Nocturne",
-      "slug": "nocturne",
-      "category": "bedroom",
-      "categoryLabel": "Bed Room",
-      "logo": "assets/img/brands/nocturne.svg"
-    },
-    {
-      "name": "Restwell",
-      "slug": "restwell",
-      "category": "bedroom",
-      "categoryLabel": "Bed Room",
-      "logo": "assets/img/brands/restwell.svg"
-    },
-    {
-      "name": "Amarante",
-      "slug": "amarante",
-      "category": "bedroom",
-      "categoryLabel": "Bed Room",
-      "logo": "assets/img/brands/amarante.svg"
-    },
-    {
-      "name": "Tavola",
-      "slug": "tavola",
-      "category": "dining",
-      "categoryLabel": "Dining Room",
-      "logo": "assets/img/brands/tavola.svg"
-    },
-    {
-      "name": "Feastwood",
-      "slug": "feastwood",
-      "category": "dining",
-      "categoryLabel": "Dining Room",
-      "logo": "assets/img/brands/feastwood.svg"
-    },
-    {
-      "name": "Serena",
-      "slug": "serena",
-      "category": "dining",
-      "categoryLabel": "Dining Room",
-      "logo": "assets/img/brands/serena.svg"
-    },
-    {
-      "name": "Gatherly",
-      "slug": "gatherly",
-      "category": "dining",
-      "categoryLabel": "Dining Room",
-      "logo": "assets/img/brands/gatherly.svg"
-    },
-    {
-      "name": "Oakmere",
-      "slug": "oakmere",
-      "category": "dining",
-      "categoryLabel": "Dining Room",
-      "logo": "assets/img/brands/oakmere.svg"
-    },
-    {
-      "name": "Meridian",
-      "slug": "meridian",
-      "category": "office",
-      "categoryLabel": "Office Furniture",
-      "logo": "assets/img/brands/meridian.svg"
-    },
-    {
-      "name": "Workform",
-      "slug": "workform",
-      "category": "office",
-      "categoryLabel": "Office Furniture",
-      "logo": "assets/img/brands/workform.svg"
-    },
-    {
-      "name": "Ergolite",
-      "slug": "ergolite",
-      "category": "office",
-      "categoryLabel": "Office Furniture",
-      "logo": "assets/img/brands/ergolite.svg"
-    },
-    {
-      "name": "Axiom",
-      "slug": "axiom",
-      "category": "office",
-      "categoryLabel": "Office Furniture",
-      "logo": "assets/img/brands/axiom.svg"
-    },
-    {
-      "name": "Deskline",
-      "slug": "deskline",
-      "category": "office",
-      "categoryLabel": "Office Furniture",
-      "logo": "assets/img/brands/deskline.svg"
-    },
-    {
-      "name": "Interia",
-      "slug": "interia",
-      "category": "interior",
-      "categoryLabel": "Interior Solutions",
-      "logo": "assets/img/brands/interia.svg"
-    },
-    {
-      "name": "Formcraft",
-      "slug": "formcraft",
-      "category": "interior",
-      "categoryLabel": "Interior Solutions",
-      "logo": "assets/img/brands/formcraft.svg"
-    },
-    {
-      "name": "Studio Nyne",
-      "slug": "studio-nyne",
-      "category": "interior",
-      "categoryLabel": "Interior Solutions",
-      "logo": "assets/img/brands/studio-nyne.svg"
-    },
-    {
-      "name": "Habitro",
-      "slug": "habitro",
-      "category": "interior",
-      "categoryLabel": "Interior Solutions",
-      "logo": "assets/img/brands/habitro.svg"
-    },
-    {
-      "name": "Claddon",
-      "slug": "claddon",
-      "category": "interior",
-      "categoryLabel": "Interior Solutions",
-      "logo": "assets/img/brands/claddon.svg"
-    },
-    {
-      "name": "Plushline",
-      "slug": "plushline",
-      "category": "sofa-set",
-      "categoryLabel": "Sofa Set",
-      "logo": "assets/img/brands/plushline.svg"
-    },
-    {
-      "name": "Sofario",
-      "slug": "sofario",
-      "category": "sofa-set",
-      "categoryLabel": "Sofa Set",
-      "logo": "assets/img/brands/sofario.svg"
-    },
-    {
-      "name": "Velour",
-      "slug": "velour",
-      "category": "sofa-set",
-      "categoryLabel": "Sofa Set",
-      "logo": "assets/img/brands/velour.svg"
-    },
-    {
-      "name": "Loungeco",
-      "slug": "loungeco",
-      "category": "sofa-set",
-      "categoryLabel": "Sofa Set",
-      "logo": "assets/img/brands/loungeco.svg"
-    },
-    {
-      "name": "Comfora",
-      "slug": "comfora",
-      "category": "sofa-set",
-      "categoryLabel": "Sofa Set",
-      "logo": "assets/img/brands/comfora.svg"
-    }
-  ];
+  var BRANDS = [];
   var CLIENTS = [
     {
       "name": "ACI",
