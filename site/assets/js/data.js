@@ -1,6 +1,6 @@
 /* GENERATED FILE - do not edit. Source: data/site.json.
    Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 75 | 2026-09-19T08:20:00Z */
+/* rev 76 | 2026-09-19T10:05:00Z */
 (function (window) {
   "use strict";
 
@@ -25,9 +25,9 @@
     "email": "query@thefurnist365.com",
     "office": {
       "label": "Our Office",
-      "street": "House 25, Road 12, DIT Project",
+      "street": "H# 25, R# 12, DIT Project",
       "floor": "",
-      "area": "South Baridhara R/A, Merul Badda, Badda, Dhaka, Bangladesh",
+      "area": "South Baridhara R/A, Merul Badda, Dhaka - 1212",
       "address": "H# 25, R# 12, DIT Project, South Baridhara R/A, Merul Badda, Dhaka - 1212",
       "hotline": "01841682259",
       "email": "query@thefurnist365.com"

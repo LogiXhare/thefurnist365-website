@@ -234,6 +234,47 @@ option:checked {
   color: var(--fc-on-primary);
 }
 
+/* The row under the pointer is the one thing the native list will not hand
+   over — it paints that with the OS accent. Engines that support the
+   customisable select (Chromium 135+) let the page draw the list itself, so
+   opt in there and give the hovered row the brand. Everywhere else the native
+   list stays, with the two rules above; only its hover colour differs. */
+@supports (appearance: base-select) {
+  select,
+  ::picker(select) { appearance: base-select; }
+
+  /* ::picker(select) is the list box itself; the rows are addressed as plain
+     options, since a descendant selector after a pseudo-element does not
+     match. */
+  ::picker(select) {
+    padding: 6px;
+    border: 1px solid var(--fc-border-strong);
+    border-radius: var(--fc-form-radius);
+    background-color: var(--fc-white);
+    box-shadow: var(--fc-shadow-lg);
+  }
+  option {
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: var(--fc-text);
+  }
+  /* Two different jobs, so two different weights: the current choice is a
+     quiet tinted row, the row under the pointer takes the full plate. */
+  option:checked {
+    background: var(--fc-alt-bg);
+    color: var(--fc-primary-ink);
+  }
+  option:hover,
+  option:focus {
+    background: var(--fc-primary);
+    color: var(--fc-on-primary);
+  }
+
+  /* the tick the base appearance adds beside the current row — the fill
+     already says which one it is */
+  ::checkmark { display: none; }
+}
+
 table { border-collapse: collapse; width: 100%; }
 
 hr { border: 0; border-top: 1px solid var(--fc-border); margin: 30px 0; }
