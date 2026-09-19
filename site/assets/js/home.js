@@ -108,7 +108,7 @@
   function renderUsps() {
     var usps = [
       { icon: "box", title: "Nationwide Delivery", text: "Delivered across Bangladesh" },
-      { icon: "store", title: "Showroom Visit", text: "See it before you buy" },
+      { icon: "store", title: "Office Visit", text: "See it before you buy" },
       { icon: "pdf", title: "E-catalogue", text: "Browse the full range" },
       { icon: "phone", title: "Hotline Support", text: D.site.phone }
     ];

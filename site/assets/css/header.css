@@ -59,10 +59,12 @@
 /* ---------------- brand logo ----------------
    The client's traced artwork as SVG. Each lockup is sized by height, because
    the rows it sits in are height-constrained and the full lockup is nearly
-   square; width follows the intrinsic ratio. Compact rows get the tower mark
-   instead, and the header swaps to it below 640px via <picture>.
-   -lg header (row 76-100px), -md footer brand, -sm sticky navbar + drawer. */
-.fc-logo picture { display: block; }
+   square; width follows the intrinsic ratio. The header always uses the full
+   lockup (icon + "FURNIST 365" wordmark) so the brand name stays visible on
+   phones — only the sticky mini-navbar uses the tower mark alone, since that
+   row is too short for the wordmark to read at any size.
+   -lg header (row 76-100px, down to 56px on phones), -md footer brand, -sm
+   sticky navbar + drawer. */
 .fc-logo-img { display: block; width: auto; max-width: 100%; object-fit: contain; }
 .fc-logo-lg { height: 76px; }
 .fc-logo-md { height: 68px; }

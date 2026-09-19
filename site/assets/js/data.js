@@ -1,6 +1,6 @@
 /* GENERATED FILE - do not edit. Source: data/site.json.
    Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 73 | 2026-09-16T20:12:20Z */
+/* rev 74 | 2026-09-19T06:45:00Z */
 (function (window) {
   "use strict";
 
@@ -19,18 +19,18 @@
     "legalName": "The Furnist 365",
     "year": "2026",
     "currency": "?",
-    "phone": "01600144705",
-    "phoneIntl": "+8801600144705",
-    "whatsapp": "8801600144705",
-    "email": "info@furnish365.com",
+    "phone": "01841682259",
+    "phoneIntl": "+8801841682259",
+    "whatsapp": "8801841682259",
+    "email": "query@thefurnist365.com",
     "office": {
       "label": "Our Office",
-      "street": "House 30, Road 7, Sector 14",
-      "floor": "6th Floor, Flat 2A",
-      "area": "Uttara, Dhaka-1230",
-      "address": "House 30, Road 7, Sector 14, Uttara, Dhaka-1230",
-      "hotline": "01600144705",
-      "email": "info@furnish365.com"
+      "street": "House 25, Road 12, DIT Project",
+      "floor": "",
+      "area": "South Baridhara R/A, Merul Badda, Badda, Dhaka, Bangladesh",
+      "address": "House 25, Road 12, DIT Project, South Baridhara R/A, Merul Badda, Badda, Dhaka, Bangladesh",
+      "hotline": "01841682259",
+      "email": "query@thefurnist365.com"
     },
     "socials": [
       {

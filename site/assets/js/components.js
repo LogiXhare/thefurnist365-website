@@ -169,9 +169,14 @@
 
   /* ---------------- brand logo ----------------
      The client's traced artwork, shipped as SVG in two lockups: the full
-     stacked one for the roomy header and footer rows, and the tower mark alone
-     where the row is too short to keep "FURNIST" legible. `size` picks the
+     stacked one (icon + "FURNIST 365" wordmark) used everywhere the brand
+     mark appears, and the tower mark alone for the sticky mini-navbar, where
+     the row is too short for the wordmark to read at all. `size` picks the
      lockup and drives the height set in header.css; it defaults to "lg".
+     The header used to swap to the tower-only mark below 640px, but that
+     dropped the "FURNIST 365" name entirely on phones — the client asked for
+     the full lockup on every screen size, so it renders here unconditionally
+     and header.css keeps it legible at the mobile row heights instead.
      width/height are the viewBox ratios scaled x4: HTML dimension attributes
      must be integers, and these reserve the exact box so nothing shifts.
      alt is empty on purpose — every call site wraps this in an <a> that already
@@ -195,22 +200,7 @@
       return logoImg(LOGO_ART.mark, key);
     }
 
-    var img = logoImg(LOGO_ART.full, key);
-    if (key !== "lg") {
-      return img;
-    }
-
-    /* The header is a single instance that shrinks with its row, down to 46px
-       on phones — too short for the stacked wordmark — so those viewports get
-       the mark from <picture> instead of a second call site. */
-    return (
-      "<picture>" +
-        '<source media="(max-width: 640px)"' +
-        ' srcset="assets/img/brand/' + LOGO_ART.mark.file + '"' +
-        ' width="' + LOGO_ART.mark.w + '" height="' + LOGO_ART.mark.h + '">' +
-        img +
-      "</picture>"
-    );
+    return logoImg(LOGO_ART.full, key);
   }
 
   /* ---------------- header ---------------- */
