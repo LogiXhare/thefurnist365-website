@@ -13,24 +13,11 @@
   function qsa(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
 
   var product = null;
-  var brand = null;
 
-  /* ---------------- brand ---------------- */
-
-  /* product.brand is a loose slug reference: it may be absent, or name a brand
-     that was dropped from D.brands. Every brand block below is opt-in on this
-     returning an object, so an unknown slug just renders the page as before. */
-  function findBrand() {
-    var list = D.brands || [];
-    for (var i = 0; i < list.length; i++) {
-      if (list[i].slug === product.brand) return list[i];
-    }
-    return null;
-  }
-
-  function brandHref() {
-    return "shop.html?brand=" + encodeURIComponent(brand.slug);
-  }
+  /* Products used to carry a brand: a logo above the title, a row in the
+     specs and a "browse all <brand>" link. Every one of those names was
+     sample data — no such company exists — so the client had it all removed.
+     The products are The Furnist 365's own and now say so. */
 
   /* ---------------- gallery ---------------- */
   function renderGallery() {
@@ -99,17 +86,9 @@
     var firstKey = optionKeys.length ? optionKeys[0] : "";
     var firstValue = firstKey ? product.options[firstKey][0] : "";
 
-    /* The logo carries no text, so the accessible name lives on the link. */
-    var brandLogo = brand
-      ? '<a class="fc-single-brand" href="' + brandHref() + '" aria-label="Browse all ' + brand.name + ' products">' +
-          '<img src="' + brand.logo + '" alt="' + brand.name + '">' +
-        "</a>"
-      : "";
-
     host.innerHTML =
       '<div class="fc-single-brandline">' +
         '<span class="fc-single-eyebrow">' + product.categoryLabel + "</span>" +
-        brandLogo +
       "</div>" +
       '<h1 class="fc-single-title">' + product.name + "</h1>" +
 
@@ -151,7 +130,6 @@
       '<dl class="fc-single-metalist">' +
         "<div><dt>SKU</dt><dd>" + product.sku + "</dd></div>" +
         "<div><dt>Category</dt><dd>" + product.categoryLabel + "</dd></div>" +
-        (brand ? '<div><dt>Brand</dt><dd><a href="' + brandHref() + '">' + brand.name + "</a></dd></div>" : "") +
         (product.series ? "<div><dt>Series</dt><dd>" + product.series + " series</dd></div>" : "") +
         "<div><dt>Availability</dt><dd>In stock</dd></div>" +
       "</dl>";
@@ -247,7 +225,6 @@
             "<tbody>" +
               "<tr><th scope=\"row\">SKU</th><td>" + product.sku + "</td></tr>" +
               "<tr><th scope=\"row\">Category</th><td>" + product.categoryLabel + "</td></tr>" +
-              (brand ? '<tr><th scope="row">Brand</th><td><a href="' + brandHref() + '">' + brand.name + "</a></td></tr>" : "") +
               (product.series ? "<tr><th scope=\"row\">Series</th><td>" + product.series + "</td></tr>" : "") +
               "<tr><th scope=\"row\">Material</th><td>" + product.material + "</td></tr>" +
               "<tr><th scope=\"row\">Dimensions</th><td>" + product.dimensions + "</td></tr>" +
@@ -344,8 +321,6 @@
       showNotFound(id);
       return;
     }
-
-    brand = findBrand();
 
     document.title = product.name + " - " + D.site.name;
     var crumb = qs("[data-fc-single-crumb]");
