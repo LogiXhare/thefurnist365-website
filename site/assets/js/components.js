@@ -194,8 +194,10 @@
      CSS shows one and hides the other; both are in the markup so the swap
      costs no request when the viewer toggles. */
   var LOGO_ART = {
-    full: { file: "logo.svg", dark: "logo-dark.svg", w: "814", h: "705" },
-    mark: { file: "logo-mark.svg", dark: "logo-mark-dark.svg", w: "351", h: "467" }
+    /* w/h only reserve the right aspect while the SVG loads — they match each
+       file's viewBox */
+    full: { file: "logo.svg", dark: "logo-dark.svg", w: "499", h: "431" },
+    mark: { file: "logo-mark.svg", dark: "logo-mark-dark.svg", w: "216", h: "284" }
   };
 
   /* The office address is stored in three parts and not every address has all
@@ -284,7 +286,7 @@
               '<span class="fc-topbar-sep"></span>' +
               '<a class="fc-topbar-item" href="catalogue.html">' + ICONS.pdf + "E-catalogue</a>" +
               '<span class="fc-topbar-sep"></span>' +
-              '<a class="fc-topbar-item" href="contact.html#showroom">' + ICONS.store + "Showroom</a>" +
+              '<a class="fc-topbar-item" href="contact.html#office">' + ICONS.store + "Office Visit</a>" +
               '<span class="fc-topbar-sep"></span>' +
               '<a class="fc-topbar-item" href="login.html" data-fc-account-link>' + ICONS.user + '<span data-fc-account-label>Login / Register</span></a>' +
               '<span class="fc-topbar-sep"></span>' +

@@ -160,7 +160,7 @@
 }
 .fc-form-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
-/* ---------------- showroom ---------------- */
+/* ---------------- office visit ---------------- */
 .fc-hours { margin: 0; padding: 0; list-style: none; font-size: 14px; }
 .fc-hours li {
   display: flex;

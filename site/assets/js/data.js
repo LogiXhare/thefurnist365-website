@@ -812,8 +812,8 @@
               "href": "catalogue.html"
             },
             {
-              "label": "Showroom",
-              "href": "contact.html#showroom"
+              "label": "Office Visit",
+              "href": "contact.html#office"
             },
             {
               "label": "About Us",
