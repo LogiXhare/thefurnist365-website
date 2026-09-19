@@ -118,7 +118,7 @@
       return setError(input, "Enter a valid email address.");
     }
     if (input.type === "tel" && !BD_PHONE_RE.test(v.replace(/[\s-]/g, ""))) {
-      return setError(input, "Enter a valid Bangladeshi mobile number, e.g. 01600144705.");
+      return setError(input, "Enter a valid Bangladeshi mobile number, e.g. 01XXXXXXXXX.");
     }
     return setError(input, "");
   }

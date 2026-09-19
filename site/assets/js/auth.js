@@ -257,7 +257,7 @@
       if (!phoneVal) {
         ok = setError(phone, "Phone number is required.") && ok;
       } else if (!/^(?:\+?880|0)1[3-9]\d{8}$/.test(phoneVal.replace(/[\s-]/g, ""))) {
-        ok = setError(phone, "Enter a valid Bangladeshi mobile number, e.g. 01600144705.") && ok;
+        ok = setError(phone, "Enter a valid Bangladeshi mobile number, e.g. 01XXXXXXXXX.") && ok;
       } else {
         ok = setError(phone, "") && ok;
       }

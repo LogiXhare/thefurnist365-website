@@ -3,8 +3,8 @@
 
    One flat form in four fieldsets. Two details that matter:
 
-   * `phoneIntl` and `whatsapp` are DERIVED from `phone` (01600144705 →
-     +8801600144705 / 8801600144705) behind an "enter them myself"
+   * `phoneIntl` and `whatsapp` are DERIVED from `phone` (01841682259 →
+     +8801841682259 / 8801841682259) behind an "enter them myself"
      disclosure. Three chances to typo a phone number become one.
    * `socials[].icon` is a select built from GET /api/admin/meta `iconKeys`,
      which is the key set of ICONS in components.js. An icon outside it is a
@@ -102,8 +102,8 @@
         { type: "fieldset", legend: "2 · Contact", fields: [
           { type: "group", fields: [
             { key: "phone", label: "Hotline", type: "text", required: true, max: 15,
-              pattern: RE.phone, patternMessage: "Enter it as 01600144705 — 11 digits starting with 0.",
-              placeholder: "01600144705" },
+              pattern: RE.phone, patternMessage: "Enter it as 01XXXXXXXXX — 11 digits starting with 0.",
+              placeholder: "01XXXXXXXXX" },
             { key: "email", label: "Email", type: "text", required: true, kind: "email", max: 160 }
           ] },
           { key: "_manualPhones", label: "Enter the international numbers myself", type: "checkbox",

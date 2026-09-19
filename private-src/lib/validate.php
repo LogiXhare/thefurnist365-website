@@ -422,7 +422,7 @@ function fc365_validate_site($ctx, &$site, string $pointer = ''): void
     fc365_v_string($ctx, $site, 'currency', $p('currency'), true, 1, 3);
     fc365_v_string(
         $ctx, $site, 'phone', $p('phone'), true, 0, null,
-        FC365_RE_PHONE, 'phone must be a local number like 01600144705'
+        FC365_RE_PHONE, 'phone must be a local number like 01XXXXXXXXX'
     );
     fc365_v_string(
         $ctx, $site, 'phoneIntl', $p('phoneIntl'), true, 0, null,
