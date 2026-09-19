@@ -243,6 +243,10 @@ option:checked {
   select,
   ::picker(select) { appearance: base-select; }
 
+  /* The base appearance turns the control into a flex box that fills its row,
+     so the label needs centring the native control did for us. */
+  select { align-items: center; }
+
   /* ::picker(select) is the list box itself; the rows are addressed as plain
      options, since a descendant selector after a pseudo-element does not
      match. */
