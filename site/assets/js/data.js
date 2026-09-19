@@ -1,6 +1,6 @@
 /* GENERATED FILE - do not edit. Source: data/site.json.
    Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 77 | 2026-09-19T10:40:00Z */
+/* rev 78 | 2026-09-19T15:14:40Z */
 (function (window) {
   "use strict";
 
