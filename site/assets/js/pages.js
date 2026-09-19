@@ -56,7 +56,6 @@
           "<li>" + FC.icons.pin +
             "<span>" + FC.officeAddress(o) + "</span>" +
           "</li>" +
-          "<li>" + FC.icons.store + "<span>Showroom and office at the same address.</span></li>" +
         "</ul>" +
       "</div>";
 
