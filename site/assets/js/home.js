@@ -88,7 +88,9 @@
     );
   }
 
-  /* ---------- corporate clients ---------- */
+  /* ---------- corporate clients ----------
+     Kept, but nothing calls it: the homepage no longer carries the client
+     wall (see index.html). Restoring the section is enough to bring it back. */
   function renderClients() {
     fill(
       "[data-fc-clients]",
@@ -133,7 +135,6 @@
     renderSeries();
     renderProducts();
     renderShorts();
-    renderClients();
     renderUsps();
     FC.cart.refresh();
   }

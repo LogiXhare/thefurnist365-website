@@ -231,6 +231,9 @@
     );
   }
 
+  /* "sm" is the tower mark on its own; every other size is the full lockup,
+     so the brand name stays on screen — including in the sticky bar, which is
+     all a scrolled desktop visitor can see of the header. */
   function logo(size) {
     var key = size || "lg";
     if (key === "sm") {
@@ -335,7 +338,7 @@
         /* ---- nav bar ---- */
         '<div class="fc-navbar" data-fc-navbar>' +
           '<div class="fc-container fc-navbar-inner">' +
-            '<a class="fc-navbar-sticky-logo" href="index.html" aria-label="' + s.name + ' home">' + logo("sm") + "</a>" +
+            '<a class="fc-navbar-sticky-logo" href="index.html" aria-label="' + s.name + ' home">' + logo("sticky") + "</a>" +
             '<nav class="fc-nav" aria-label="Main navigation">' +
               '<ul class="fc-nav-list">' + navItems + "</ul>" +
             "</nav>" +

@@ -96,12 +96,12 @@
 /* ---------------- brand logo ----------------
    The client's traced artwork as SVG. Each lockup is sized by height, because
    the rows it sits in are height-constrained and the full lockup is nearly
-   square; width follows the intrinsic ratio. The header always uses the full
-   lockup (icon + "FURNIST 365" wordmark) so the brand name stays visible on
-   phones — only the sticky mini-navbar uses the tower mark alone, since that
-   row is too short for the wordmark to read at any size.
-   -lg header (row 76-100px, down to 56px on phones), -md footer brand, -sm
-   sticky navbar + drawer. */
+   square; width follows the intrinsic ratio. Everything on screen uses the
+   full lockup (icon + "FURNIST 365" wordmark) so the brand name is never the
+   half that gets dropped; only the drawer, which opens under its own heading,
+   uses the tower mark alone.
+   -lg header (row 76-100px, down to 56px on phones), -md footer brand,
+   -sticky the scrolled nav bar, -sm the drawer. */
 .fc-logo-img { display: block; width: auto; max-width: 100%; object-fit: contain; }
 
 /* Dark is the default theme, so the cream artwork is what renders unless the
@@ -114,6 +114,9 @@
 .fc-logo-lg { height: 76px; }
 .fc-logo-md { height: 68px; }
 .fc-logo-sm { height: 34px; }
+/* as tall as the 52px nav row allows, which leaves the FURNIST plate around
+   9px — small, but the name reads */
+.fc-logo-sticky { height: 40px; }
 
 /* ---- search ---- */
 .fc-search { flex: 1 1 auto; max-width: 620px; }
@@ -259,7 +262,14 @@
   font-size: 12px;
   font-weight: 500;
 }
-.fc-navbar-aside a { display: inline-flex; align-items: center; gap: 6px; }
+/* Both of these are short labels that must never break: wrapped onto two
+   lines they outgrow the 52px row and the bar looks broken. */
+.fc-navbar-aside a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
 .fc-navbar-aside svg { width: 15px; height: 15px; }
 .fc-navbar-hotline { color: var(--fc-primary-ink); font-weight: 600; }
 
