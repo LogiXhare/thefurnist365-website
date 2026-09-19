@@ -2,35 +2,69 @@
    base.css — reset, design tokens, typography
    Tokens mirror the live furnitureconcept.com.bd theme (Woodmart) values,
    except the brand colour, which comes from the client's own logo.
+
+   THEMING. The brand is a black card with an orange plate, so dark is the
+   house look and every visitor gets it on a first visit — the palette below
+   is dark, and the light palette is the opt-in alternative further down.
+   The OS prefers-color-scheme setting is deliberately NOT consulted: it
+   would hand half the audience a white site the brand never asked for.
+   Only the colour tokens flip between themes. Anything that is a colour
+   belongs in this block, never inline in a component rule, or it will be
+   right in one theme and wrong in the other.
    ========================================================================== */
 
 :root {
   /* ---- brand colour ----
-     The logo orange is 2.41:1 on white, so it fills but never sets type.
-     -ink / -dark are the same hue darkened for text; -on-primary is the ink
-     that sits on an orange plate, exactly as the logo sets "FURNIST". */
+     The logo orange carries the brand on both grounds. On black it is also
+     legible as type (7.4:1), so -ink brightens rather than darkens here;
+     the light theme darkens it instead, where the fill is only 2.41:1.
+     -on-primary is the ink that sits on an orange plate, exactly as the
+     logo sets "FURNIST". */
   --fc-primary:        #fa8a00;  /* logo orange — fills, plates, accents */
-  --fc-primary-ink:    #a85800;  /* text on light: 5.17:1 on #fff, 4.7:1 on #f4f4f4 */
-  --fc-primary-hover:  #e07a00;  /* fill hover only */
-  --fc-primary-dark:   #8f4b00;  /* text hover: 6.62:1 on #fff */
+  --fc-primary-ink:    #ffa733;  /* text on black: 7.42:1 */
+  --fc-primary-hover:  #ffa02e;  /* fill hover only */
+  --fc-primary-dark:   #ffbf66;  /* text hover: 10.1:1 on #0b0b0b */
   --fc-on-primary:     #141414;  /* type on the orange plate: 7.63:1 */
 
-  /* Danger is its own hue now. While the brand was red, error borders and
+  /* Danger is its own hue. While the brand was red, error borders and
      messages could lean on --fc-primary and still read as "wrong"; an orange
-     brand cannot carry that meaning, so errors get a dedicated red. */
-  --fc-danger:         #c62828;  /* 5.62:1 on #fff, 5.11:1 on #f4f4f4 */
+     brand cannot carry that meaning, so errors get a dedicated red — lifted
+     here so it clears 4.5:1 on the black ground. */
+  --fc-danger:         #ff6b6b;  /* 6.1:1 on #0b0b0b */
 
-  /* ---- text / surfaces ---- */
-  --fc-text:           rgb(56, 56, 56);
-  --fc-text-soft:      #767676;
-  --fc-title:          #242424;
-  --fc-entities-title: rgb(26, 26, 26);
-  --fc-white:          #ffffff;
-  --fc-alt-bg:         rgb(244, 244, 244);
-  --fc-dark-bg:        #1a1a1a;
-  --fc-footer-bg:      #f7f7f7;
-  --fc-border:         rgba(0, 0, 0, 0.105);
-  --fc-border-strong:  #ececec;
+  /* ---- text / surfaces ----
+     --fc-white is a legacy name kept because it is referenced across the
+     sheets; read it as "the card surface", not as the colour white. The
+     ink that must stay light on a permanently dark plate is --fc-on-dark,
+     which never flips. */
+  --fc-text:           #ded7c9;
+  --fc-text-soft:      #a29a8c;
+  --fc-title:          #f4efe4;
+  --fc-entities-title: #f7f3ea;
+  --fc-white:          #151515;  /* card / panel surface */
+  --fc-alt-bg:         #1d1d1d;  /* raised or striped surface */
+  --fc-page-bg:        #0b0b0b;  /* the ground the page paints */
+  --fc-dark-bg:        #141414;  /* plates that are dark in BOTH themes */
+  --fc-on-dark:        #ffffff;  /* ink on those plates — never flips */
+  --fc-on-dark-soft:   rgba(255, 255, 255, 0.82);  /* secondary ink on those plates */
+  --fc-on-dark-dim:    rgba(255, 255, 255, 0.55);  /* labels and captions there */
+  --fc-on-dark-line:   rgba(255, 255, 255, 0.22);  /* hairlines on those plates */
+  --fc-on-dark-plate:  rgba(255, 255, 255, 0.08);  /* an inset panel on those plates */
+  --fc-footer-bg:      #0f0f0f;
+  --fc-border:         rgba(255, 255, 255, 0.11);
+  --fc-border-strong:  rgba(255, 255, 255, 0.17);
+
+  /* Semantic, not brand: these keep their meaning in both themes and are
+     only lifted in the dark one so they clear 4.5:1 on black. */
+  --fc-success:        #51cf66;
+  --fc-whatsapp:       #25d366;
+
+  /* Glass = a panel that floats over page content (sticky header, drawers).
+     Scrim = a wash laid over imagery to keep type legible on top of it. */
+  --fc-glass:          rgba(17, 17, 17, 0.92);
+  --fc-glass-soft:     rgba(17, 17, 17, 0.82);
+  --fc-scrim:          rgba(0, 0, 0, 0.55);
+  --fc-scrim-soft:     rgba(0, 0, 0, 0.35);
 
   /* ---- typography ---- */
   --fc-font-text:   "Poppins", Arial, Helvetica, sans-serif;
@@ -57,12 +91,63 @@
   --fc-gap:         20px;
   --fc-gap-sm:      10px;
 
-  /* ---- effects ---- */
-  --fc-shadow:      0 0 12px rgba(0, 0, 0, 0.08);
-  --fc-shadow-lg:   0 6px 24px rgba(0, 0, 0, 0.12);
+  /* ---- effects ----
+     A black shadow does nothing on a black ground, so the dark theme leans
+     on the hairline borders above for separation and keeps the shadow only
+     for depth under floating panels. */
+  --fc-shadow-sm:   0 2px 6px rgba(0, 0, 0, 0.5);
+  --fc-shadow:      0 0 12px rgba(0, 0, 0, 0.55);
+  --fc-shadow-lg:   0 8px 28px rgba(0, 0, 0, 0.65);
   --fc-transition:  0.25s ease;
   --fc-z-header:    390;
   --fc-z-overlay:   500;
+}
+
+/* ==========================================================================
+   Light theme — the opt-in alternative, reached only by the header toggle
+   (which stores the choice) and never by an OS setting. Colour tokens only:
+   every metric, font and radius above is shared.
+   ========================================================================== */
+:root[data-theme="light"] {
+  --fc-primary-ink:    #a85800;  /* 5.17:1 on #fff, 4.7:1 on #f4f4f4 */
+  --fc-primary-hover:  #e07a00;
+  --fc-primary-dark:   #8f4b00;  /* 6.62:1 on #fff */
+  --fc-danger:         #c62828;  /* 5.62:1 on #fff */
+
+  --fc-text:           rgb(56, 56, 56);
+  --fc-text-soft:      #767676;
+  --fc-title:          #242424;
+  --fc-entities-title: rgb(26, 26, 26);
+  --fc-white:          #ffffff;
+  --fc-alt-bg:         rgb(244, 244, 244);
+  --fc-page-bg:        #ffffff;
+  --fc-dark-bg:        #1a1a1a;
+  --fc-footer-bg:      #f7f7f7;
+  --fc-border:         rgba(0, 0, 0, 0.105);
+  --fc-border-strong:  #ececec;
+
+  --fc-glass:          rgba(255, 255, 255, 0.94);
+  --fc-glass-soft:     rgba(255, 255, 255, 0.86);
+  --fc-scrim:          rgba(0, 0, 0, 0.45);
+  --fc-scrim-soft:     rgba(0, 0, 0, 0.28);
+
+  --fc-success:        #2f9e44;  /* 3.9:1 on #fff as a fill, never as type */
+
+  --fc-shadow-sm:      0 2px 6px rgba(0, 0, 0, 0.04);
+  --fc-shadow:         0 0 12px rgba(0, 0, 0, 0.08);
+  --fc-shadow-lg:      0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Swapping the palette mid-page otherwise cross-fades every transition the
+   page owns, each at its own duration, which reads as a stutter rather than
+   a switch. The class is set around the swap and cleared on a timer —
+   requestAnimationFrame does not reliably fire in a backgrounded tab, and a
+   class stuck on would kill every hover transition for the rest of the
+   session. */
+:root.fc-theme-switching *,
+:root.fc-theme-switching *::before,
+:root.fc-theme-switching *::after {
+  transition: none !important;
 }
 
 /* ---------- reset ---------- */
@@ -82,8 +167,9 @@ body {
   font-weight: var(--fc-text-weight);
   line-height: 1.6;
   color: var(--fc-text);
-  background-color: var(--fc-white);
+  background-color: var(--fc-page-bg);
   overflow-x: hidden;
+  transition: background-color var(--fc-transition), color var(--fc-transition);
 }
 
 h1, h2, h3, h4, h5, h6 {

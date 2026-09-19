@@ -39,6 +39,10 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Z"/><path d="M3 9l2-5h14l2 5"/></svg>',
     eye:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 6.5 12 6.5 21.5 12 21.5 12 18 17.5 12 17.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></svg>',
+    sun:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6l1.4 1.4m10 10 1.4 1.4m0-12.8-1.4 1.4m-10 10-1.4 1.4"/></svg>',
+    moon:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13.5A8 8 0 1 1 10.5 4a6.5 6.5 0 0 0 9.5 9.5Z"/></svg>',
     arrowUp:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5m0 0-6 6m6-6 6 6"/></svg>',
     arrowLeft:
@@ -180,17 +184,27 @@
      width/height are the viewBox ratios scaled x4: HTML dimension attributes
      must be integers, and these reserve the exact box so nothing shifts.
      alt is empty on purpose — every call site wraps this in an <a> that already
-     carries aria-label="<site name> home". */
+     carries aria-label="<site name> home".
+
+     Each lockup ships twice. The artwork draws the tower, "THE" and "365" in
+     near-black, which disappears on the dark theme's ground, and no CSS
+     filter can lift just those without also wrecking the orange plate — so
+     the -dark files recolour exactly that one path to cream and leave
+     "FURNIST" dark, because it sits on the orange plate in both themes.
+     CSS shows one and hides the other; both are in the markup so the swap
+     costs no request when the viewer toggles. */
   var LOGO_ART = {
-    full: { file: "logo.svg", w: "814", h: "705" },
-    mark: { file: "logo-mark.svg", w: "351", h: "467" }
+    full: { file: "logo.svg", dark: "logo-dark.svg", w: "814", h: "705" },
+    mark: { file: "logo-mark.svg", dark: "logo-mark-dark.svg", w: "351", h: "467" }
   };
 
   function logoImg(art, size) {
+    var dims = ' alt="" width="' + art.w + '" height="' + art.h + '">';
     return (
-      '<img class="fc-logo-img fc-logo-' + size + '"' +
-        ' src="assets/img/brand/' + art.file + '"' +
-        ' alt="" width="' + art.w + '" height="' + art.h + '">'
+      '<img class="fc-logo-img fc-logo-' + size + ' fc-logo-on-dark"' +
+        ' src="assets/img/brand/' + art.dark + '"' + dims +
+      '<img class="fc-logo-img fc-logo-' + size + ' fc-logo-on-light"' +
+        ' src="assets/img/brand/' + art.file + '"' + dims
     );
   }
 
@@ -248,6 +262,12 @@
               '<a class="fc-topbar-item" href="contact.html#showroom">' + ICONS.store + "Showroom</a>" +
               '<span class="fc-topbar-sep"></span>' +
               '<a class="fc-topbar-item" href="login.html" data-fc-account-link>' + ICONS.user + '<span data-fc-account-label>Login / Register</span></a>' +
+              '<span class="fc-topbar-sep"></span>' +
+              '<button type="button" class="fc-topbar-item fc-theme-toggle" data-fc-theme-toggle aria-pressed="false">' +
+                '<span class="fc-theme-icon-dark">' + ICONS.sun + "</span>" +
+                '<span class="fc-theme-icon-light">' + ICONS.moon + "</span>" +
+                '<span data-fc-theme-label>Light mode</span>' +
+              "</button>" +
             "</div>" +
           "</div>" +
         "</div>" +
@@ -461,12 +481,59 @@
     );
   }
 
+  /* ---------------- theme ----------------
+     Dark is the house look, so "no stored choice" means dark and the OS
+     setting is never consulted. The <head> of every page applies the stored
+     choice before first paint; this only handles the toggle itself and the
+     label, which cannot run earlier because the header is built here. */
+  var THEME_KEY = "fc365-theme";
+
+  function currentTheme() {
+    return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  }
+
+  function paintToggle(btn) {
+    var light = currentTheme() === "light";
+    var label = btn.querySelector("[data-fc-theme-label]");
+    btn.setAttribute("aria-pressed", light ? "true" : "false");
+    if (label) label.textContent = light ? "Dark mode" : "Light mode";
+  }
+
+  function bindThemeToggle() {
+    var btn = document.querySelector("[data-fc-theme-toggle]");
+    if (!btn) return;
+    paintToggle(btn);
+
+    btn.addEventListener("click", function () {
+      var next = currentTheme() === "light" ? "dark" : "light";
+      var root = document.documentElement;
+
+      /* Suppress transitions across the swap, then clear on a timer —
+         rAF does not reliably fire in a backgrounded tab, and a class left
+         on would kill every hover transition for the rest of the session. */
+      root.classList.add("fc-theme-switching");
+      if (next === "light") root.setAttribute("data-theme", "light");
+      else root.removeAttribute("data-theme");
+      window.setTimeout(function () {
+        root.classList.remove("fc-theme-switching");
+      }, 80);
+
+      try {
+        window.localStorage.setItem(THEME_KEY, next);
+      } catch (e) {
+        /* private mode or storage blocked: the choice simply will not stick */
+      }
+      paintToggle(btn);
+    });
+  }
+
   /* ---------------- mount ---------------- */
   function mount() {
     var head = document.querySelector("[data-fc-header]");
     var foot = document.querySelector("[data-fc-footer]");
     if (head) head.innerHTML = headerHTML();
     if (foot) foot.innerHTML = footerHTML();
+    bindThemeToggle();
 
     /* mark the active top-level nav item */
     var current = document.body.getAttribute("data-fc-nav");

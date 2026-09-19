@@ -34,7 +34,7 @@
 .fc-stat {
   padding: 26px 22px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   border: 1px solid var(--fc-border);
   text-align: center;
 }
@@ -58,7 +58,7 @@
   padding: 26px 24px 28px;
   border: 1px solid var(--fc-border);
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   height: 100%;
 }
 .fc-feature-icon {
@@ -88,7 +88,7 @@
   padding: 28px 22px 24px;
   border: 1px solid var(--fc-border);
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
 }
 .fc-step::before {
   counter-increment: fc-step;
@@ -117,7 +117,7 @@
   border: 1px solid var(--fc-border);
   border-top: 3px solid var(--fc-primary);
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   height: 100%;
 }
 .fc-office-card h2 { margin: 0 0 16px; font-size: 18px; }
@@ -146,7 +146,7 @@
 .fc-form-card {
   padding: 32px 34px 36px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   border: 1px solid var(--fc-border);
   box-shadow: var(--fc-shadow);
 }
@@ -180,7 +180,7 @@
   overflow: hidden;
   border: 1px solid var(--fc-border);
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   height: 100%;
 }
 .fc-cat-download-media {

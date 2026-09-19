@@ -56,20 +56,20 @@
   position: relative;
   z-index: 2;
   max-width: 560px;
-  color: #fff;
+  color: var(--fc-on-dark);
 }
 .fc-hero-title {
   margin: 0 0 14px;
   font-size: clamp(28px, 4vw, 52px);
   font-weight: 600;
   line-height: 1.15;
-  color: #fff;
+  color: var(--fc-on-dark);
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
 }
 .fc-hero-text {
   margin: 0 0 26px;
   font-size: clamp(15px, 1.5vw, 19px);
-  color: rgba(255, 255, 255, 0.92);
+  color: var(--fc-on-dark);
   text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
 }
 
@@ -99,7 +99,7 @@
   transform: translateY(-50%);
   border: 0;
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--fc-glass);
   color: var(--fc-title);
   box-shadow: var(--fc-shadow);
   transition: background-color var(--fc-transition), color var(--fc-transition);
@@ -123,12 +123,12 @@
   width: 11px;
   height: 11px;
   padding: 0;
-  border: 2px solid #fff;
+  border: 2px solid var(--fc-on-dark);
   border-radius: 50%;
   background-color: transparent;
   transition: background-color var(--fc-transition), width var(--fc-transition);
 }
-.fc-hero-dot.is-active { background-color: #fff; width: 26px; border-radius: 6px; }
+.fc-hero-dot.is-active { background-color: var(--fc-white); width: 26px; border-radius: 6px; }
 
 /* ---------------- category tiles ---------------- */
 .fc-categories {
@@ -230,7 +230,7 @@
   height: 54px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.92);
+  background-color: var(--fc-glass);
   color: var(--fc-primary-ink);
   transition: transform var(--fc-transition);
 }
@@ -241,7 +241,7 @@
   inset-inline: 16px;
   bottom: 14px;
   z-index: 3;
-  color: #fff;
+  color: var(--fc-on-dark);
   font-size: 14px;
   font-weight: 500;
 }
@@ -258,7 +258,7 @@
   gap: 14px;
   padding: 22px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   border: 1px solid var(--fc-border);
 }
 .fc-usp-icon {

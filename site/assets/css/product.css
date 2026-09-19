@@ -88,7 +88,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: #2f9e44;
+  color: var(--fc-success);
   font-weight: 500;
 }
 .fc-stock::before {
@@ -96,7 +96,7 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #2f9e44;
+  background-color: var(--fc-success);
 }
 
 .fc-single-price {
@@ -180,7 +180,7 @@
   padding: 0 14px;
   border: var(--fc-form-brd-w) solid var(--fc-border-strong);
   border-radius: var(--fc-form-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   color: var(--fc-title);
   font-size: 12px;
   font-weight: 600;

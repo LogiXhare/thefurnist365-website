@@ -7,6 +7,20 @@
   <meta name="description" content="Apply to become a dealer for The Furnist 365 - partner benefits, requirements and the application process.">
 
   <link rel="icon" href="assets/img/brand/favicon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#0b0b0b">
+
+  <!-- Applies the stored theme before the first paint. Dark is the house
+       default, so only a stored "light" does anything here, and a blocked or
+       unreadable localStorage falls through to dark, which is correct. Must
+       stay inline and in <head>: deferred to the body it would paint one
+       frame of the wrong theme on every load. -->
+  <script>
+    try {
+      if (localStorage.getItem("fc365-theme") === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    } catch (e) {}
+  </script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

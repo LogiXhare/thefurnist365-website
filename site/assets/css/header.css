@@ -8,12 +8,12 @@
 /* ---------------- top bar ---------------- */
 .fc-topbar {
   background-color: var(--fc-dark-bg);
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--fc-on-dark-soft);
   font-family: var(--fc-font-header);
   font-size: 12px;
 }
-.fc-topbar a { color: rgba(255, 255, 255, 0.82); }
-.fc-topbar a:hover { color: #fff; }
+.fc-topbar a { color: var(--fc-on-dark-soft); }
+.fc-topbar a:hover { color: var(--fc-on-dark); }
 
 .fc-topbar-inner {
   display: flex;
@@ -39,12 +39,32 @@
 .fc-topbar-sep {
   width: 1px;
   height: 12px;
-  background-color: rgba(255, 255, 255, 0.22);
+  background-color: var(--fc-on-dark-line);
 }
+
+/* ---- theme toggle ----
+   Sits in the top bar, which is a dark plate in both themes, so it inherits
+   that plate's ink rather than the page's. The icon shows what a click will
+   GIVE you: a sun while dark, a moon while light. */
+.fc-theme-toggle {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  transition: color var(--fc-transition);
+}
+.fc-theme-toggle:hover { color: var(--fc-on-dark); }
+.fc-theme-toggle svg { width: 14px; height: 14px; }
+.fc-theme-icon-dark,
+.fc-theme-icon-light { display: inline-flex; }
+.fc-theme-icon-light { display: none; }
+:root[data-theme="light"] .fc-theme-icon-dark { display: none; }
+:root[data-theme="light"] .fc-theme-icon-light { display: inline-flex; }
 
 /* ---------------- main header row ---------------- */
 .fc-header {
-  background-color: #fff;
+  background-color: var(--fc-white);
   border-bottom: 1px solid var(--fc-border);
 }
 .fc-header-inner {
@@ -66,6 +86,14 @@
    -lg header (row 76-100px, down to 56px on phones), -md footer brand, -sm
    sticky navbar + drawer. */
 .fc-logo-img { display: block; width: auto; max-width: 100%; object-fit: contain; }
+
+/* Dark is the default theme, so the cream artwork is what renders unless the
+   viewer has switched to light. Both files sit in the markup — see logoImg()
+   in components.js — so toggling costs no request. */
+.fc-logo-on-light { display: none; }
+:root[data-theme="light"] .fc-logo-on-dark { display: none; }
+:root[data-theme="light"] .fc-logo-on-light { display: block; }
+
 .fc-logo-lg { height: 76px; }
 .fc-logo-md { height: 68px; }
 .fc-logo-sm { height: 34px; }
@@ -77,7 +105,7 @@
   align-items: stretch;
   border: var(--fc-form-brd-w) solid var(--fc-border-strong);
   border-radius: 35px;
-  background-color: #fff;
+  background-color: var(--fc-white);
   overflow: hidden;
   transition: border-color var(--fc-transition);
 }
@@ -157,9 +185,9 @@
 
 /* ---------------- nav bar (52px) ---------------- */
 .fc-navbar {
-  background-color: #fff;
+  background-color: var(--fc-white);
   border-bottom: 1px solid var(--fc-border);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--fc-shadow-sm);
 }
 .fc-navbar-inner {
   display: flex;
@@ -229,7 +257,7 @@
   max-width: min(1100px, 92vw);
   padding: 26px 30px;
   border-top: 2px solid var(--fc-primary);
-  background-color: #fff;
+  background-color: var(--fc-white);
   box-shadow: var(--fc-shadow-lg);
   opacity: 0;
   visibility: hidden;
@@ -287,13 +315,13 @@
   padding: 18px;
   border-radius: var(--fc-radius);
   background: var(--fc-alt-bg) center/cover no-repeat;
-  color: #fff;
+  color: var(--fc-on-dark);
 }
 .fc-mega-promo-title {
   margin: 0 0 6px;
   font-size: 17px;
   font-weight: 600;
-  color: #fff;
+  color: var(--fc-on-dark);
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 .fc-mega-promo p {
@@ -359,7 +387,7 @@
   width: 320px;
   max-width: 86vw;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--fc-white);
   box-shadow: var(--fc-shadow-lg);
   transform: translateX(-100%);
   transition: transform 0.3s ease;
@@ -460,7 +488,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--fc-z-overlay);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--fc-scrim);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--fc-transition), visibility var(--fc-transition);
@@ -480,7 +508,7 @@ body.fc-no-scroll { overflow: hidden; }
   width: 380px;
   max-width: 92vw;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--fc-white);
   box-shadow: var(--fc-shadow-lg);
   transform: translateX(100%);
   transition: transform 0.3s ease;
@@ -551,7 +579,7 @@ body.fc-no-scroll { overflow: hidden; }
   align-items: flex-start;
   justify-content: center;
   padding: 90px 20px 20px;
-  background-color: rgba(255, 255, 255, 0.98);
+  background-color: var(--fc-glass);
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--fc-transition), visibility var(--fc-transition);

@@ -18,7 +18,7 @@
 .fc-auth-card {
   padding: 34px 36px 38px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   box-shadow: var(--fc-shadow);
 }
 
@@ -128,7 +128,7 @@
 }
 .fc-strength-seg.is-on-weak { background-color: #e03131; }
 .fc-strength-seg.is-on-fair { background-color: #f59f00; }
-.fc-strength-seg.is-on-good { background-color: #2f9e44; }
+.fc-strength-seg.is-on-good { background-color: var(--fc-success); }
 .fc-strength-label {
   margin-top: 6px;
   font-size: 12px;
@@ -146,12 +146,12 @@
   padding: 26px 26px 28px;
   border-radius: var(--fc-radius);
   background-color: var(--fc-dark-bg);
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--fc-on-dark-soft);
 }
 .fc-demo-box h2 {
   margin: 0 0 6px;
   font-size: 17px;
-  color: #fff;
+  color: var(--fc-on-dark);
 }
 .fc-demo-box p {
   margin: 0 0 18px;
@@ -172,23 +172,23 @@
   gap: 12px;
   padding: 9px 12px;
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: var(--fc-on-dark-plate);
   margin-bottom: 7px;
 }
 .fc-demo-creds span:first-child {
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--fc-on-dark-dim);
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 0.06em;
 }
-.fc-demo-creds span:last-child { color: #fff; }
+.fc-demo-creds span:last-child { color: var(--fc-on-dark); }
 
 .fc-demo-box .fc-btn-light { width: 100%; }
 
 .fc-auth-note {
   padding: 20px 22px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   border: 1px solid var(--fc-border);
   font-size: 13px;
   line-height: 1.7;

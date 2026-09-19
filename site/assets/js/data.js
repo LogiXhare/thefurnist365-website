@@ -18,7 +18,7 @@
     "tagline": "Home, Office, and Hospital Solution",
     "legalName": "The Furnist 365",
     "year": "2026",
-    "currency": "?",
+    "currency": "\u09f3",
     "phone": "01841682259",
     "phoneIntl": "+8801841682259",
     "whatsapp": "8801841682259",

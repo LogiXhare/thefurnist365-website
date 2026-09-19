@@ -36,7 +36,7 @@
 }
 
 /* the dark variant sets its own light type — .fc-btn's ink is for the orange plate */
-.fc-btn-dark { background-color: var(--fc-dark-bg); color: #fff; }
+.fc-btn-dark { background-color: var(--fc-dark-bg); color: var(--fc-on-dark); }
 .fc-btn-dark:hover { background-color: var(--fc-primary); color: var(--fc-on-primary); }
 
 .fc-btn-outline {
@@ -51,7 +51,7 @@
 }
 
 .fc-btn-light {
-  background-color: #fff;
+  background-color: var(--fc-white);
   color: var(--fc-title);
 }
 .fc-btn-light:hover { background-color: var(--fc-primary); color: var(--fc-on-primary); }
@@ -89,10 +89,10 @@
   text-transform: uppercase;
 }
 /* dark plate needs light type back — .fc-badge's ink is for the orange plate */
-.fc-badge-dark { background-color: var(--fc-dark-bg); color: #fff; }
+.fc-badge-dark { background-color: var(--fc-dark-bg); color: var(--fc-on-dark); }
 /* Dark type on the green reads 5.35:1, where the white it used to inherit from
    the red-era .fc-badge managed only 3.45:1 — stated rather than inherited. */
-.fc-badge-new { background-color: #2f9e44; color: var(--fc-on-primary); }
+.fc-badge-new { background-color: var(--fc-success); color: var(--fc-on-primary); }
 
 .fc-count-bubble {
   position: absolute;
@@ -130,7 +130,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--fc-white);
   text-align: center;
   transition: box-shadow var(--fc-transition);
 }
@@ -187,7 +187,7 @@
   height: 36px;
   border: 0;
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--fc-white);
   color: var(--fc-title);
   box-shadow: var(--fc-shadow);
 }
@@ -243,7 +243,7 @@
   padding: 3px 9px;
   border: 1px solid var(--fc-border-strong);
   border-radius: 3px;
-  background: #fff;
+  background: var(--fc-white);
   font-size: 11px;
   color: var(--fc-text);
   transition: border-color var(--fc-transition), color var(--fc-transition);
@@ -284,7 +284,7 @@
   bottom: 12px;
   padding: 11px 14px;
   border-radius: var(--fc-form-radius);
-  background-color: rgba(255, 255, 255, 0.94);
+  background-color: var(--fc-glass);
   font-family: var(--fc-font-title);
   font-size: 14px;
   font-weight: 600;
@@ -318,7 +318,7 @@
   padding: 10px 14px;
   border: var(--fc-form-brd-w) solid var(--fc-border-strong);
   border-radius: var(--fc-form-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   color: var(--fc-text);
   transition: border-color var(--fc-transition);
 }
@@ -367,7 +367,7 @@
   background-color: var(--fc-alt-bg);
   font-size: 14px;
 }
-.fc-notice-success { border-left-color: #2f9e44; }
+.fc-notice-success { border-left-color: var(--fc-success); }
 .fc-notice-error { border-left-color: var(--fc-danger); }
 .fc-notice[hidden] { display: none !important; }
 
@@ -387,7 +387,7 @@
   padding: 13px 18px;
   border-radius: var(--fc-form-radius);
   background-color: var(--fc-dark-bg);
-  color: #fff;
+  color: var(--fc-on-dark);
   font-size: 13px;
   box-shadow: var(--fc-shadow-lg);
   animation: fc-toast-in 0.28s ease;
@@ -410,7 +410,7 @@
 .fc-modal-backdrop {
   position: absolute;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: var(--fc-scrim);
 }
 .fc-modal-dialog {
   position: relative;
@@ -420,7 +420,7 @@
   overflow-y: auto;
   padding: 30px;
   border-radius: var(--fc-radius);
-  background-color: #fff;
+  background-color: var(--fc-white);
   box-shadow: var(--fc-shadow-lg);
   animation: fc-modal-in 0.24s ease;
 }
