@@ -14,6 +14,11 @@
    ========================================================================== */
 
 :root {
+  /* Browser-painted furniture — select drop-downs, scrollbars, spinners —
+     follows this, not the tokens below. Without it they stay light while the
+     page is dark. */
+  color-scheme: dark;
+
   /* ---- brand colour ----
      The logo orange carries the brand on both grounds. On black it is also
      legible as type (7.4:1), so -ink brightens rather than darkens here;
@@ -109,6 +114,8 @@
    every metric, font and radius above is shared.
    ========================================================================== */
 :root[data-theme="light"] {
+  color-scheme: light;
+
   --fc-primary-ink:    #a85800;  /* 5.17:1 on #fff, 4.7:1 on #f4f4f4 */
   --fc-primary-hover:  #e07a00;
   --fc-primary-dark:   #8f4b00;  /* 6.62:1 on #fff */
@@ -209,6 +216,23 @@ ul.fc-plain { list-style: none; margin: 0; padding: 0; }
 button { font-family: inherit; cursor: pointer; }
 
 input, select, textarea { font-family: inherit; font-size: 14px; }
+
+/* A <select>'s drop-down list is painted by the browser, not by the page, so
+   it took the OS light colours while inheriting the page's off-white ink —
+   pale grey on white, barely readable. color-scheme (set with the palette
+   above) is what tells the browser which native colours to use; these rules
+   then state the list's own surface and put the brand on the current row,
+   instead of the OS accent blue. */
+option {
+  background-color: var(--fc-white);
+  color: var(--fc-text);
+}
+option:checked {
+  /* a flat background-color is ignored for the selected row in some engines;
+     a gradient of one colour is the accepted way to force it */
+  background: var(--fc-primary) linear-gradient(var(--fc-primary), var(--fc-primary));
+  color: var(--fc-on-primary);
+}
 
 table { border-collapse: collapse; width: 100%; }
 
