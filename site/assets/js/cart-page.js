@@ -366,8 +366,8 @@
     if (offices) {
       var o = D.site.office;
       offices.innerHTML =
-        "<div><h3>" + o.label + "</h3><p>" + o.street + "<br>" + o.floor + "<br>" + o.area + "</p></div>" +
-        "<div><h3>Contact</h3><p>Hotline: " + D.site.phone + "<br>" + D.site.email + "</p></div>";
+        "<div><h3>" + o.label + "</h3><p>" + FC.officeAddress(o) + "</p></div>" +
+        "<div><h3>Contact</h3><p>Hotline: " + FC.phoneText(D.site) + "<br>" + D.site.email + "</p></div>";
     }
 
     /* logout */

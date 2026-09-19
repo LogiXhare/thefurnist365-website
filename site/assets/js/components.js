@@ -198,6 +198,27 @@
     mark: { file: "logo-mark.svg", dark: "logo-mark-dark.svg", w: "351", h: "467" }
   };
 
+  /* The office address is stored in three parts and not every address has all
+     three — this one has no floor line. Printing them with a <br> between each
+     left an empty line in the middle of the address, so join the parts that
+     are actually there and let the text wrap on its own. */
+  function officeAddress(o) {
+    return [o.street, o.floor, o.area]
+      .filter(function (part) { return part && part.trim(); })
+      .join(", ");
+  }
+
+  /* How the hotline reads on the page. It cannot be stored pre-formatted:
+     site.phone is validated as a local number (01841682259) and site.phoneIntl
+     as bare digits, so the spacing is applied here, off the international
+     number. Anything that is not a +880 number is printed as stored. */
+  function phoneText(s) {
+    var digits = String(s.phoneIntl || "").replace(/\D/g, "");
+    if (digits.length !== 13 || digits.slice(0, 3) !== "880") return s.phone;
+
+    return "+880 " + digits.slice(3, 7) + " - " + digits.slice(7);
+  }
+
   function logoImg(art, size) {
     var dims = ' alt="" width="' + art.w + '" height="' + art.h + '">';
     return (
@@ -259,7 +280,7 @@
               "</span>" +
             "</div>" +
             '<div class="fc-topbar-right">' +
-              '<a class="fc-topbar-item" href="tel:' + s.phoneIntl + '">' + ICONS.phone + "Hotline: " + s.phone + "</a>" +
+              '<a class="fc-topbar-item" href="tel:' + s.phoneIntl + '">' + ICONS.phone + "Hotline: " + phoneText(s) + "</a>" +
               '<span class="fc-topbar-sep"></span>' +
               '<a class="fc-topbar-item" href="catalogue.html">' + ICONS.pdf + "E-catalogue</a>" +
               '<span class="fc-topbar-sep"></span>' +
@@ -318,7 +339,7 @@
             "</nav>" +
             '<div class="fc-navbar-aside">' +
               '<a href="dealer.html">Become a Dealer</a>' +
-              '<a class="fc-navbar-hotline" href="tel:' + s.phoneIntl + '">' + ICONS.phone + s.phone + "</a>" +
+              '<a class="fc-navbar-hotline" href="tel:' + s.phoneIntl + '">' + ICONS.phone + phoneText(s) + "</a>" +
             "</div>" +
           "</div>" +
         "</div>" +
@@ -373,7 +394,7 @@
         '<div class="fc-drawer-foot">' +
           '<a href="login.html" data-fc-account-link><strong data-fc-account-label>Login / Register</strong></a>' +
           '<a href="dealer.html">Become a Dealer</a>' +
-          '<a href="tel:' + s.phoneIntl + '">Hotline: ' + s.phone + "</a>" +
+          '<a href="tel:' + s.phoneIntl + '">Hotline: ' + phoneText(s) + "</a>" +
         "</div>" +
       "</div>" +
 
@@ -435,10 +456,10 @@
         '<h4 class="fc-footer-title">' + o.label + "</h4>" +
         '<ul class="fc-footer-contact">' +
           "<li>" + ICONS.pin +
-            "<span>" + o.street + "<br>" + o.floor + "<br>" + o.area + "</span>" +
+            "<span>" + officeAddress(o) + "</span>" +
           "</li>" +
           "<li>" + ICONS.phone +
-            '<span><strong>Hotline:</strong> <a href="tel:' + s.phoneIntl + '">' + s.phone + "</a></span>" +
+            '<span><strong>Hotline:</strong> <a href="tel:' + s.phoneIntl + '">' + phoneText(s) + "</a></span>" +
           "</li>" +
           "<li>" + ICONS.mail +
             '<span><a href="mailto:' + s.email + '">' + s.email + "</a></span>" +
@@ -455,9 +476,8 @@
     var brandCol =
       "<div>" +
         '<a class="fc-footer-brand" href="index.html" aria-label="' + s.name + ' home">' + logo("md") + "</a>" +
-        '<p class="fc-footer-about">' + s.tagline +
-          ". Furniture for homes, offices, institutions and hospitals &mdash; " +
-          "delivered across Bangladesh.</p>" +
+        /* the whole blurb is the tagline, so the panel owns this text */
+        '<p class="fc-footer-about">' + s.tagline + "</p>" +
         '<div class="fc-socials">' + socials + "</div>" +
       "</div>";
 
@@ -549,6 +569,8 @@
 
   window.FC = window.FC || {};
   window.FC.icons = ICONS;
+  window.FC.officeAddress = officeAddress;
+  window.FC.phoneText = phoneText;
   window.FC.money = money;
   window.FC.priceHTML = priceHTML;
   window.FC.productCard = productCard;

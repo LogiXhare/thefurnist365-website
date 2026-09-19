@@ -1,6 +1,6 @@
 /* GENERATED FILE - do not edit. Source: data/site.json.
    Regenerate: python3 build/render_data_js.py (CI does this on every deploy). */
-/* rev 76 | 2026-09-19T10:05:00Z */
+/* rev 77 | 2026-09-19T10:40:00Z */
 (function (window) {
   "use strict";
 
@@ -15,7 +15,7 @@
 
   var SITE = {
     "name": "The Furnist 365",
-    "tagline": "Home, Office, and Hospital Solution",
+    "tagline": "The Furnist 365: A cloud furniture factory delivering custom-crafted home and workplace solutions across Bangladesh.",
     "legalName": "The Furnist 365",
     "year": "2026",
     "currency": "\u09f3",

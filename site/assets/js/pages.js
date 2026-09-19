@@ -54,7 +54,7 @@
         "<h2>" + o.label + "</h2>" +
         '<ul class="fc-office-list">' +
           "<li>" + FC.icons.pin +
-            "<span>" + o.street + "<br>" + o.floor + "<br>" + o.area + "</span>" +
+            "<span>" + FC.officeAddress(o) + "</span>" +
           "</li>" +
           "<li>" + FC.icons.store + "<span>Showroom and office at the same address.</span></li>" +
         "</ul>" +
@@ -65,10 +65,10 @@
         "<h2>Call or message us</h2>" +
         '<ul class="fc-office-list">' +
           "<li>" + FC.icons.phone +
-            '<span><strong>Hotline:</strong> <a href="tel:' + s.phoneIntl + '">' + s.phone + "</a></span>" +
+            '<span><strong>Hotline:</strong> <a href="tel:' + s.phoneIntl + '">' + FC.phoneText(s) + "</a></span>" +
           "</li>" +
           "<li>" + FC.icons.whatsapp +
-            '<span><strong>WhatsApp:</strong> <a href="https://wa.me/' + s.whatsapp + '" target="_blank" rel="noopener">' + s.phone + "</a></span>" +
+            '<span><strong>WhatsApp:</strong> <a href="https://wa.me/' + s.whatsapp + '" target="_blank" rel="noopener">' + FC.phoneText(s) + "</a></span>" +
           "</li>" +
           "<li>" + FC.icons.mail +
             '<span><a href="mailto:' + s.email + '">' + s.email + "</a></span>" +
@@ -169,7 +169,7 @@
         box.innerHTML =
           "<strong>Thanks — your details look good.</strong><br>" +
           "This front-end demo does not send messages anywhere. To reach us for real, " +
-          'call <a href="tel:' + D.site.phoneIntl + '">' + D.site.phone + "</a>.";
+          'call <a href="tel:' + D.site.phoneIntl + '">' + FC.phoneText(D.site) + "</a>.";
         box.hidden = false;
         box.scrollIntoView({ behavior: "smooth", block: "center" });
       }

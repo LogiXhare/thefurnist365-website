@@ -144,7 +144,7 @@
 
       '<ul class="fc-single-assurance">' +
         "<li>" + FC.icons.box + "<span>Delivered nationwide across Bangladesh. Delivery is quoted at order confirmation.</span></li>" +
-        "<li>" + FC.icons.phone + '<span>Questions? Hotline <a href="tel:' + D.site.phoneIntl + '">' + D.site.phone + "</a> (WhatsApp &amp; Call).</span></li>" +
+        "<li>" + FC.icons.phone + '<span>Questions? Hotline <a href="tel:' + D.site.phoneIntl + '">' + FC.phoneText(D.site) + "</a> (WhatsApp &amp; Call).</span></li>" +
         "<li>" + FC.icons.store + '<span>See this piece in person &mdash; <a href="contact.html#showroom">visit a showroom</a>.</span></li>' +
       "</ul>" +
 

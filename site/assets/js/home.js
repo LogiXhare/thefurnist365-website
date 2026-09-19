@@ -110,7 +110,7 @@
       { icon: "box", title: "Nationwide Delivery", text: "Delivered across Bangladesh" },
       { icon: "store", title: "Office Visit", text: "See it before you buy" },
       { icon: "pdf", title: "E-catalogue", text: "Browse the full range" },
-      { icon: "phone", title: "Hotline Support", text: D.site.phone }
+      { icon: "phone", title: "Hotline Support", text: FC.phoneText(D.site) }
     ];
 
     fill(
