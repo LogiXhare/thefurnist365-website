@@ -15,26 +15,43 @@
 .fc-topbar a { color: var(--fc-on-dark-soft); }
 .fc-topbar a:hover { color: var(--fc-on-dark); }
 
+/* The bar is one line: the links keep their full width and the address, the
+   only part that can be long, gives way first and ellipsises. Wrapping is
+   re-enabled at phone width, where a single line cannot hold the links. */
 .fc-topbar-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--fc-gap);
   min-height: 36px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .fc-topbar-left,
 .fc-topbar-right {
   display: flex;
   align-items: center;
   gap: 18px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
+.fc-topbar-left {
+  min-width: 0;
+  overflow: hidden;
+}
+.fc-topbar-right { flex: none; }
 .fc-topbar-item {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
+.fc-topbar-left .fc-topbar-item { min-width: 0; }
+.fc-topbar-address {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fc-topbar-item svg { flex: none; }
 .fc-topbar-item svg { width: 14px; height: 14px; }
 .fc-topbar-sep {
   width: 1px;

@@ -1,8 +1,8 @@
 {
   "_meta": {
     "schema": 1,
-    "rev": 74,
-    "updatedAt": "2026-09-19T06:45:00Z"
+    "rev": 75,
+    "updatedAt": "2026-09-19T08:20:00Z"
   },
   "site": {
     "name": "The Furnist 365",
@@ -19,7 +19,7 @@
       "street": "House 25, Road 12, DIT Project",
       "floor": "",
       "area": "South Baridhara R/A, Merul Badda, Badda, Dhaka, Bangladesh",
-      "address": "House 25, Road 12, DIT Project, South Baridhara R/A, Merul Badda, Badda, Dhaka, Bangladesh",
+      "address": "H# 25, R# 12, DIT Project, South Baridhara R/A, Merul Badda, Dhaka - 1212",
       "hotline": "01841682259",
       "email": "query@thefurnist365.com"
     },

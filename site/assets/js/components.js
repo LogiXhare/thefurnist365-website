@@ -252,7 +252,11 @@
         '<div class="fc-topbar">' +
           '<div class="fc-container fc-topbar-inner">' +
             '<div class="fc-topbar-left">' +
-              '<span class="fc-topbar-item">' + ICONS.pin + s.office.address + "</span>" +
+              '<span class="fc-topbar-item">' + ICONS.pin +
+                /* own element so it can ellipsise: a bare text node inside a
+                   flex row is an anonymous item and text-overflow skips it */
+                '<span class="fc-topbar-address">' + s.office.address + "</span>" +
+              "</span>" +
             "</div>" +
             '<div class="fc-topbar-right">' +
               '<a class="fc-topbar-item" href="tel:' + s.phoneIntl + '">' + ICONS.phone + "Hotline: " + s.phone + "</a>" +
